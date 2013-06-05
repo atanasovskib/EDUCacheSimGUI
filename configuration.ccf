@@ -1,0 +1,33 @@
+<Configuration>
+	<CacheLevels>
+		<CacheLevel>
+			<UID>FIFO_L1</UID>
+			<RP>FIFO</RP>
+			<Size>16384</Size>
+			<LWidth>64</LWidth>
+			<Associativity>8</Associativity>
+		</CacheLevel>
+		<CacheLevel>
+			<UID>FIFO_L2</UID>
+			<RP>FIFO</RP>
+			<Size>32768</Size>
+			<LWidth>64</LWidth>
+			<Associativity>16</Associativity>
+		</CacheLevel>
+		<CacheLevel>
+			<UID>LRU_L3</UID>
+			<RP>LRU</RP>
+			<Size>131072</Size>
+			<LWidth>64</LWidth>
+			<Associativity>32</Associativity>
+		</CacheLevel>
+	</CacheLevels>
+	<CacheCores>
+		<Core>
+			<UID>Core_1</UID>
+			<L1>FIFO_L1</L1>
+			<L2>FIFO_L2</L2>
+			<L3>LRU_L3</L3>
+		</Core>
+	</CacheCores>
+</Configuration>
