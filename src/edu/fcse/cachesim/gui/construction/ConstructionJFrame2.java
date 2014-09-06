@@ -5,13 +5,17 @@
  */
 package edu.fcse.cachesim.gui.construction;
 
+import edu.fcse.cachesim.gui.utils.StringLiterals;
 import edu.fcse.cachesim.gui.utils.WrapLayout;
+import edu.fcse.cachesim.implementation.CPUCoreImpl;
 import edu.fcse.cachesim.implementation.CacheLevelImpl;
+import edu.fcse.cachesim.interfaces.CPUCore;
 import edu.fcse.cachesim.interfaces.CacheLevel;
 import edu.fcse.cachesim.interfaces.ReplacementPolicy;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,15 +24,25 @@ import javax.swing.JOptionPane;
 public class ConstructionJFrame2 extends javax.swing.JFrame {
     
     Map<String, CacheLevelGUIRepresentation> createdElements;
+    Map<String, CPUCoreGUIRepresentation> createdCPUs;
 
     /**
      * Creates new form ConstructionJFrame2
      */
     public ConstructionJFrame2() {
-        initComponents();
         createdElements = new HashMap<>();
+        createdCPUs = new HashMap<>();
+        
+        initComponents();
         createdElementsPanel.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
-        createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
+        createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
+        createdCPUsPanel.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
+        CacheLevel cl1 = new CacheLevelImpl("test1", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel cl2 = new CacheLevelImpl("test2", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel cl3 = new CacheLevelImpl("test3", ReplacementPolicy.LRU, 1, 1, 1);
+        CPUCore c=new CPUCoreImpl("C1", cl1, cl2, cl3);
+        createdCPUs.put("C1",new CPUCoreGUIRepresentation(this, c));
+        createdCPUsPanel.add(createdCPUs.get("C1"));
     }
 
     /**
@@ -72,6 +86,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         combineElementsPanel = new javax.swing.JPanel();
         createdElementsScrollAssemble = new javax.swing.JScrollPane();
         createdElementsPanelAssemble = new javax.swing.JPanel();
+        createdCPUsScroll = new javax.swing.JScrollPane();
+        createdCPUsPanel = new javax.swing.JPanel();
+        jPanelSelectedCPU = new javax.swing.JPanel();
+        jButtonCreateCore = new javax.swing.JButton();
+        jLabelL1spot = new javax.swing.JLabel();
+        jLabelL2spot = new javax.swing.JLabel();
+        jLabelL3spot = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jButtonDeleteCore = new javax.swing.JButton();
         previewAssemblyPlanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -304,17 +327,115 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
         createdElementsScrollAssemble.setViewportView(createdElementsPanelAssemble);
 
+        createdCPUsScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        createdCPUsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Cores"));
+        createdCPUsPanel.setPreferredSize(new java.awt.Dimension(95, 190));
+
+        javax.swing.GroupLayout createdCPUsPanelLayout = new javax.swing.GroupLayout(createdCPUsPanel);
+        createdCPUsPanel.setLayout(createdCPUsPanelLayout);
+        createdCPUsPanelLayout.setHorizontalGroup(
+            createdCPUsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 86, Short.MAX_VALUE)
+        );
+        createdCPUsPanelLayout.setVerticalGroup(
+            createdCPUsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 188, Short.MAX_VALUE)
+        );
+
+        createdCPUsScroll.setViewportView(createdCPUsPanel);
+
+        jPanelSelectedCPU.setBorder(javax.swing.BorderFactory.createTitledBorder("Create Core"));
+        jPanelSelectedCPU.setPreferredSize(new java.awt.Dimension(354, 246));
+
+        jButtonCreateCore.setText("Create");
+
+        jLabelL1spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabelL1spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelL1spot.setText("Drop L1 cache element here");
+        jLabelL1spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelL1spot.setMaximumSize(new java.awt.Dimension(34, 55));
+        jLabelL1spot.setMinimumSize(new java.awt.Dimension(34, 55));
+        jLabelL1spot.setPreferredSize(new java.awt.Dimension(34, 55));
+
+        jLabelL2spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabelL2spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelL2spot.setText("Drop L2 cache element here");
+        jLabelL2spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelL2spot.setMaximumSize(new java.awt.Dimension(34, 55));
+        jLabelL2spot.setMinimumSize(new java.awt.Dimension(34, 55));
+        jLabelL2spot.setPreferredSize(new java.awt.Dimension(34, 55));
+
+        jLabelL3spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabelL3spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelL3spot.setText("Drop L3 cache element here");
+        jLabelL3spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabelL3spot.setMaximumSize(new java.awt.Dimension(34, 55));
+        jLabelL3spot.setMinimumSize(new java.awt.Dimension(34, 55));
+        jLabelL3spot.setPreferredSize(new java.awt.Dimension(34, 55));
+
+        jLabel6.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel6.setText("<-Drag from the created elements");
+
+        javax.swing.GroupLayout jPanelSelectedCPULayout = new javax.swing.GroupLayout(jPanelSelectedCPU);
+        jPanelSelectedCPU.setLayout(jPanelSelectedCPULayout);
+        jPanelSelectedCPULayout.setHorizontalGroup(
+            jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCreateCore))
+                    .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
+                        .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelL1spot, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelL2spot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabelL3spot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        jPanelSelectedCPULayout.setVerticalGroup(
+            jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSelectedCPULayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelL1spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelL2spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelL3spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonCreateCore)
+                    .addComponent(jLabel6)))
+        );
+
+        jButtonDeleteCore.setText("Delete Core");
+
         javax.swing.GroupLayout combineElementsPanelLayout = new javax.swing.GroupLayout(combineElementsPanel);
         combineElementsPanel.setLayout(combineElementsPanelLayout);
         combineElementsPanelLayout.setHorizontalGroup(
             combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(combineElementsPanelLayout.createSequentialGroup()
                 .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 466, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(createdCPUsScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteCore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         combineElementsPanelLayout.setVerticalGroup(
             combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(createdElementsScrollAssemble)
+            .addGroup(combineElementsPanelLayout.createSequentialGroup()
+                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(combineElementsPanelLayout.createSequentialGroup()
+                        .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDeleteCore)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         previewAssemblyPlanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Preview"));
@@ -340,7 +461,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         assemblyTabPanelLayout.setVerticalGroup(
             assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(assemblyTabPanelLayout.createSequentialGroup()
-                .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -416,7 +537,14 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
     private void jButtonDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteSelectedActionPerformed
         if (selectedCacheElement != null && createdElements.containsKey(selectedCacheElement)) {
-            CacheLevelGUIRepresentation level = createdElements.remove(selectedCacheElement);
+            for(String coreTag : createdCPUs.keySet()){
+                CPUCoreGUIRepresentation cc = createdCPUs.get(coreTag);
+                if(cc.getCore().getLevel(selectedCacheElement)!=null){
+                     JOptionPane.showMessageDialog(null, "Cache level you are trying to delete is being used in the CPUCore with the tag: "+coreTag+". Delete the cpu core first", "EDUCacheSim: " + "Delete cache level", JOptionPane.INFORMATION_MESSAGE);
+                    return ;
+                }
+            }
+            createdElements.remove(selectedCacheElement);
             createdElementsPanel.removeAll();
             for (String tag : createdElements.keySet()) {
                 createdElementsPanel.add(createdElements.get(tag));
@@ -428,12 +556,20 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDeleteSelectedActionPerformed
 
     private void constructionTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_constructionTabbedPaneStateChanged
-        createdElementsPanelAssemble.removeAll();
-        if (constructionTabbedPane.getSelectedIndex() == 1) {
+        
+        JPanel containingPanel=null;
+        if(constructionTabbedPane.getSelectedIndex() == 0){
+            createdElementsPanel.removeAll();
+            containingPanel = createdElementsPanel;
+        }else if(constructionTabbedPane.getSelectedIndex() == 1){
+            createdElementsPanelAssemble.removeAll();
+            containingPanel = createdElementsPanelAssemble;
+        }
+        if (containingPanel!=null) {
             for (String key : createdElements.keySet()) {
-                createdElementsPanelAssemble.add(createdElements.get(key));
+                containingPanel.add(createdElements.get(key));
             }
-            createdElementsPanelAssemble.updateUI();
+            containingPanel.updateUI();
         }
     }//GEN-LAST:event_constructionTabbedPaneStateChanged
     private ReplacementPolicy getReplacementPolicyChosen() {
@@ -484,12 +620,16 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JPanel assemblyTabPanel;
     private javax.swing.JPanel combineElementsPanel;
     private javax.swing.JTabbedPane constructionTabbedPane;
+    private javax.swing.JPanel createdCPUsPanel;
+    private javax.swing.JScrollPane createdCPUsScroll;
     private javax.swing.JPanel createdElementsPanel;
     private javax.swing.JPanel createdElementsPanelAssemble;
     private javax.swing.JScrollPane createdElementsScrollAssemble;
     private javax.swing.JScrollPane createdElementsScrollPane;
     private javax.swing.JPanel elementTabPanel;
     private javax.swing.JButton jButtonConstruction_CreateLevel;
+    private javax.swing.JButton jButtonCreateCore;
+    private javax.swing.JButton jButtonDeleteCore;
     private javax.swing.JButton jButtonDeleteSelected;
     private javax.swing.JComboBox jComboBoxConstruction_SizeRange;
     private javax.swing.JLabel jLabel1;
@@ -499,6 +639,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelL1spot;
+    private javax.swing.JLabel jLabelL2spot;
+    private javax.swing.JLabel jLabelL3spot;
     private javax.swing.JLabel jLabelSelected;
     private javax.swing.JLabel jLabelToolTipAssoc;
     private javax.swing.JLabel jLabelToolTipLW;
@@ -506,6 +650,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelToolTipSize;
     private javax.swing.JLabel jLabelToolTipUID;
     private javax.swing.JPanel jPanelConstruction_CreateNewLevel;
+    private javax.swing.JPanel jPanelSelectedCPU;
     private javax.swing.JRadioButton jRadioButtonConstruction_RP_FIFO;
     private javax.swing.JRadioButton jRadioButtonConstruction_RP_LRU;
     private javax.swing.JRadioButton jRadioButtonConstructuion_RP_BPLRU;
@@ -529,4 +674,8 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         }
     }
     private String selectedCacheElement;
+
+    void loadCoreInfo(CPUCore core) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
