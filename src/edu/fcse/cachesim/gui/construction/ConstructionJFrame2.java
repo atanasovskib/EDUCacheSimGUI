@@ -3,20 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package edu.fcse.cachesim.gui.construction;
+
+import edu.fcse.cachesim.gui.utils.WrapLayout;
+import edu.fcse.cachesim.implementation.CacheLevelImpl;
+import edu.fcse.cachesim.interfaces.CacheLevel;
+import edu.fcse.cachesim.interfaces.ReplacementPolicy;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Atanasovski
  */
 public class ConstructionJFrame2 extends javax.swing.JFrame {
+    
+    Map<String, CacheLevelGUIRepresentation> createdElements;
 
     /**
      * Creates new form ConstructionJFrame2
      */
     public ConstructionJFrame2() {
         initComponents();
+        createdElements = new HashMap<>();
+        createdElementsPanel.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
+        createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
     }
 
     /**
@@ -28,21 +40,410 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        constructionTabbedPane = new javax.swing.JTabbedPane();
+        elementTabPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanelConstruction_CreateNewLevel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jRadioButtonConstruction_RP_LRU = new javax.swing.JRadioButton();
+        jRadioButtonConstruction_RP_FIFO = new javax.swing.JRadioButton();
+        jRadioButtonConstructuion_RP_BPLRU = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBoxConstruction_SizeRange = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        jButtonConstruction_CreateLevel = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabelToolTipAssoc = new javax.swing.JLabel();
+        jLabelToolTipSize = new javax.swing.JLabel();
+        jLabelToolTipLW = new javax.swing.JLabel();
+        jLabelToolTipUID = new javax.swing.JLabel();
+        jLabelToolTipRP = new javax.swing.JLabel();
+        jTextFieldAssoc = new javax.swing.JTextField();
+        jTextFieldSize = new javax.swing.JTextField();
+        jTextFieldLineW = new javax.swing.JTextField();
+        jTextFieldUID = new javax.swing.JTextField();
+        createdElementsScrollPane = new javax.swing.JScrollPane();
+        createdElementsPanel = new javax.swing.JPanel();
+        jButtonDeleteSelected = new javax.swing.JButton();
+        jLabelSelected = new javax.swing.JLabel();
+        assemblyTabPanel = new javax.swing.JPanel();
+        combineElementsPanel = new javax.swing.JPanel();
+        createdElementsScrollAssemble = new javax.swing.JScrollPane();
+        createdElementsPanelAssemble = new javax.swing.JPanel();
+        previewAssemblyPlanel = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        constructionTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                constructionTabbedPaneStateChanged(evt);
+            }
+        });
+
+        jLabel1.setText("<html>Create the separate cache levelts and save them. <br/>Then go to the \"Assemble Cache Elements\" tab to combine them into CPUs</html>");
+
+        jPanelConstruction_CreateNewLevel.setBorder(javax.swing.BorderFactory.createTitledBorder("Create New Cache Element"));
+
+        jLabel2.setText("Choose replacement policy:");
+
+        jRadioButtonConstruction_RP_LRU.setSelected(true);
+        jRadioButtonConstruction_RP_LRU.setText("LRU");
+        jRadioButtonConstruction_RP_LRU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonConstruction_RP_LRUActionPerformed(evt);
+            }
+        });
+
+        jRadioButtonConstruction_RP_FIFO.setText("FIFO");
+
+        jRadioButtonConstructuion_RP_BPLRU.setText("Bit PLRU");
+
+        jLabel3.setText("Associativity:");
+
+        jLabel4.setText("Size:");
+
+        jComboBoxConstruction_SizeRange.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "B", "KB", "MB" }));
+
+        jLabel5.setText("UID:");
+
+        jButtonConstruction_CreateLevel.setText("Create Level");
+        jButtonConstruction_CreateLevel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConstruction_CreateLevelActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Line width:");
+
+        jLabel11.setText("B");
+
+        jLabelToolTipAssoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/fcse/cachesim/gui/construction/warning.png"))); // NOI18N
+
+        jLabelToolTipSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/fcse/cachesim/gui/construction/warning.png"))); // NOI18N
+
+        jLabelToolTipLW.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/fcse/cachesim/gui/construction/warning.png"))); // NOI18N
+
+        jLabelToolTipUID.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/fcse/cachesim/gui/construction/warning.png"))); // NOI18N
+
+        jLabelToolTipRP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edu/fcse/cachesim/gui/construction/warning.png"))); // NOI18N
+        jLabelToolTipRP.setToolTipText("");
+
+        javax.swing.GroupLayout jPanelConstruction_CreateNewLevelLayout = new javax.swing.GroupLayout(jPanelConstruction_CreateNewLevel);
+        jPanelConstruction_CreateNewLevel.setLayout(jPanelConstruction_CreateNewLevelLayout);
+        jPanelConstruction_CreateNewLevelLayout.setHorizontalGroup(
+            jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelToolTipRP))
+                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                        .addComponent(jRadioButtonConstruction_RP_LRU)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonConstruction_RP_FIFO)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButtonConstructuion_RP_BPLRU))
+                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButtonConstruction_CreateLevel)
+                        .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                            .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                    .addComponent(jLabelToolTipLW)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel10))
+                                .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                    .addComponent(jLabelToolTipUID)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5))
+                                .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabelToolTipSize)
+                                        .addComponent(jLabelToolTipAssoc))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextFieldAssoc)
+                                .addComponent(jTextFieldSize)
+                                .addComponent(jTextFieldLineW)
+                                .addComponent(jTextFieldUID, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jComboBoxConstruction_SizeRange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel11))))))
+        );
+        jPanelConstruction_CreateNewLevelLayout.setVerticalGroup(
+            jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabelToolTipRP))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonConstruction_RP_LRU)
+                    .addComponent(jRadioButtonConstruction_RP_FIFO)
+                    .addComponent(jRadioButtonConstructuion_RP_BPLRU))
+                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabelToolTipAssoc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabelToolTipSize))
+                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jTextFieldAssoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addComponent(jLabel4))
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jComboBoxConstruction_SizeRange, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabelToolTipLW)
+                                            .addComponent(jLabel10)))
+                                    .addGroup(jPanelConstruction_CreateNewLevelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextFieldLineW, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel11))
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanelConstruction_CreateNewLevelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabelToolTipUID)
+                            .addComponent(jTextFieldUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19)
+                        .addComponent(jButtonConstruction_CreateLevel)))
+                .addContainerGap(188, Short.MAX_VALUE))
+        );
+
+        createdElementsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Cache Elements"));
+        createdElementsScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        createdElementsPanel.setLayout(null);
+        createdElementsScrollPane.setViewportView(createdElementsPanel);
+
+        jButtonDeleteSelected.setText("Delete Selected");
+        jButtonDeleteSelected.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteSelectedActionPerformed(evt);
+            }
+        });
+
+        jLabelSelected.setText("Selected:");
+
+        javax.swing.GroupLayout elementTabPanelLayout = new javax.swing.GroupLayout(elementTabPanel);
+        elementTabPanel.setLayout(elementTabPanelLayout);
+        elementTabPanelLayout.setHorizontalGroup(
+            elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(elementTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, elementTabPanelLayout.createSequentialGroup()
+                        .addComponent(jPanelConstruction_CreateNewLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(elementTabPanelLayout.createSequentialGroup()
+                                .addComponent(jLabelSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonDeleteSelected))
+                            .addComponent(createdElementsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        elementTabPanelLayout.setVerticalGroup(
+            elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(elementTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelConstruction_CreateNewLevel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(elementTabPanelLayout.createSequentialGroup()
+                        .addComponent(createdElementsScrollPane)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(elementTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonDeleteSelected)
+                            .addComponent(jLabelSelected))))
+                .addContainerGap())
+        );
+
+        constructionTabbedPane.addTab("Create Cache Elements", elementTabPanel);
+
+        combineElementsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Create"));
+
+        createdElementsScrollAssemble.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        createdElementsPanelAssemble.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Elements"));
+        createdElementsPanelAssemble.setPreferredSize(new java.awt.Dimension(122, 244));
+
+        javax.swing.GroupLayout createdElementsPanelAssembleLayout = new javax.swing.GroupLayout(createdElementsPanelAssemble);
+        createdElementsPanelAssemble.setLayout(createdElementsPanelAssembleLayout);
+        createdElementsPanelAssembleLayout.setHorizontalGroup(
+            createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 130, Short.MAX_VALUE)
+        );
+        createdElementsPanelAssembleLayout.setVerticalGroup(
+            createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 221, Short.MAX_VALUE)
+        );
+
+        createdElementsScrollAssemble.setViewportView(createdElementsPanelAssemble);
+
+        javax.swing.GroupLayout combineElementsPanelLayout = new javax.swing.GroupLayout(combineElementsPanel);
+        combineElementsPanel.setLayout(combineElementsPanelLayout);
+        combineElementsPanelLayout.setHorizontalGroup(
+            combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(combineElementsPanelLayout.createSequentialGroup()
+                .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 466, Short.MAX_VALUE))
+        );
+        combineElementsPanelLayout.setVerticalGroup(
+            combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(createdElementsScrollAssemble)
+        );
+
+        previewAssemblyPlanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Preview"));
+
+        javax.swing.GroupLayout previewAssemblyPlanelLayout = new javax.swing.GroupLayout(previewAssemblyPlanel);
+        previewAssemblyPlanel.setLayout(previewAssemblyPlanelLayout);
+        previewAssemblyPlanelLayout.setHorizontalGroup(
+            previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        previewAssemblyPlanelLayout.setVerticalGroup(
+            previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 193, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout assemblyTabPanelLayout = new javax.swing.GroupLayout(assemblyTabPanel);
+        assemblyTabPanel.setLayout(assemblyTabPanelLayout);
+        assemblyTabPanelLayout.setHorizontalGroup(
+            assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        assemblyTabPanelLayout.setVerticalGroup(
+            assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(assemblyTabPanelLayout.createSequentialGroup()
+                .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        constructionTabbedPane.addTab("Assemble Cache Elements", assemblyTabPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(constructionTabbedPane)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(constructionTabbedPane)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jRadioButtonConstruction_RP_LRUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonConstruction_RP_LRUActionPerformed
+
+    }//GEN-LAST:event_jRadioButtonConstruction_RP_LRUActionPerformed
+
+    private void jButtonConstruction_CreateLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConstruction_CreateLevelActionPerformed
+        String tag = jTextFieldUID.getText();
+        if (tag.length() == 0) {
+            JOptionPane.showMessageDialog(null, "UID tag required for level\n", "EDUCacheSim: " + "Create configuration", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        
+        int result = JOptionPane.YES_OPTION;
+        if (createdElements.containsKey(tag)) {
+            result = JOptionPane.showConfirmDialog(null, "Specified UID exists, replace?", "EDUCacheSim: Create configuration", JOptionPane.YES_NO_OPTION);
+        }
+        if (result == JOptionPane.NO_OPTION) {
+            return;
+        }
+        ReplacementPolicy rp = getReplacementPolicyChosen();
+        try {
+            int assoc = Integer.parseInt(jTextFieldAssoc.getText());
+            int size = Integer.parseInt(jTextFieldSize.getText());
+            int linew = Integer.parseInt(jTextFieldLineW.getText());
+            String sizeRange = (String) jComboBoxConstruction_SizeRange.getSelectedItem();
+            switch (sizeRange) {
+                case "KB":
+                    size *= 1024;
+                    break;
+                case "MB":
+                    size *= 1024 * 1024;
+                    break;
+            }
+            if (size < assoc * linew) {
+                JOptionPane.showMessageDialog(null, "Cache Size must be at least (LineWidth*Associativity) Bytes\n", "EDUCacheSim: " + "Create configuration", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            CacheLevel cl = new CacheLevelImpl(tag, rp, size, assoc, linew);
+            createdElements.put(tag, new CacheLevelGUIRepresentation(this, cl));
+            
+            createdElementsPanel.add(new CacheLevelGUIRepresentation(this, cl));
+            createdElementsPanel.invalidate();
+            createdElementsPanel.updateUI();
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Numbers only required in fields Associativity, Size and Line width\n", "EDUCacheSim: " + "Create configuration", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonConstruction_CreateLevelActionPerformed
+
+    private void jButtonDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteSelectedActionPerformed
+        if (selectedCacheElement != null && createdElements.containsKey(selectedCacheElement)) {
+            CacheLevelGUIRepresentation level = createdElements.remove(selectedCacheElement);
+            createdElementsPanel.removeAll();
+            for (String tag : createdElements.keySet()) {
+                createdElementsPanel.add(createdElements.get(tag));
+            }
+            selectedCacheElement = null;
+            createdElementsPanel.updateUI();
+            jLabelSelected.setText("Selected: none");
+        }
+    }//GEN-LAST:event_jButtonDeleteSelectedActionPerformed
+
+    private void constructionTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_constructionTabbedPaneStateChanged
+        createdElementsPanelAssemble.removeAll();
+        if (constructionTabbedPane.getSelectedIndex() == 1) {
+            for (String key : createdElements.keySet()) {
+                createdElementsPanelAssemble.add(createdElements.get(key));
+            }
+            createdElementsPanelAssemble.updateUI();
+        }
+    }//GEN-LAST:event_constructionTabbedPaneStateChanged
+    private ReplacementPolicy getReplacementPolicyChosen() {
+        if (jRadioButtonConstruction_RP_FIFO.isSelected()) {
+            return ReplacementPolicy.FIFO;
+        } else if (jRadioButtonConstruction_RP_LRU.isSelected()) {
+            return ReplacementPolicy.LRU;
+        }
+        return ReplacementPolicy.BitPLRU;
+    }
 
     /**
      * @param args the command line arguments
@@ -55,7 +456,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -80,5 +481,52 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel assemblyTabPanel;
+    private javax.swing.JPanel combineElementsPanel;
+    private javax.swing.JTabbedPane constructionTabbedPane;
+    private javax.swing.JPanel createdElementsPanel;
+    private javax.swing.JPanel createdElementsPanelAssemble;
+    private javax.swing.JScrollPane createdElementsScrollAssemble;
+    private javax.swing.JScrollPane createdElementsScrollPane;
+    private javax.swing.JPanel elementTabPanel;
+    private javax.swing.JButton jButtonConstruction_CreateLevel;
+    private javax.swing.JButton jButtonDeleteSelected;
+    private javax.swing.JComboBox jComboBoxConstruction_SizeRange;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelSelected;
+    private javax.swing.JLabel jLabelToolTipAssoc;
+    private javax.swing.JLabel jLabelToolTipLW;
+    private javax.swing.JLabel jLabelToolTipRP;
+    private javax.swing.JLabel jLabelToolTipSize;
+    private javax.swing.JLabel jLabelToolTipUID;
+    private javax.swing.JPanel jPanelConstruction_CreateNewLevel;
+    private javax.swing.JRadioButton jRadioButtonConstruction_RP_FIFO;
+    private javax.swing.JRadioButton jRadioButtonConstruction_RP_LRU;
+    private javax.swing.JRadioButton jRadioButtonConstructuion_RP_BPLRU;
+    private javax.swing.JTextField jTextFieldAssoc;
+    private javax.swing.JTextField jTextFieldLineW;
+    private javax.swing.JTextField jTextFieldSize;
+    private javax.swing.JTextField jTextFieldUID;
+    private javax.swing.JPanel previewAssemblyPlanel;
     // End of variables declaration//GEN-END:variables
+
+    void showInfo(String tag) {
+        if (createdElements.containsKey(tag)) {
+            CacheLevelGUIRepresentation selected = createdElements.get(tag);
+            CacheLevel level = selected.getCacheLevel();
+            jTextFieldAssoc.setText(level.getAssoc() + "");
+            jTextFieldLineW.setText(level.getLineWidth() + "");
+            jTextFieldSize.setText(level.getSize() + "");
+            jTextFieldUID.setText(tag);
+            jLabelSelected.setText("<html>Selected <b>" + tag + "</b></html>");
+            selectedCacheElement = tag;
+        }
+    }
+    private String selectedCacheElement;
 }
