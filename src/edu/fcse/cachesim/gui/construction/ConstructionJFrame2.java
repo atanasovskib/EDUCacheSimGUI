@@ -14,6 +14,7 @@ import edu.fcse.cachesim.interfaces.CacheLevel;
 import edu.fcse.cachesim.interfaces.ReplacementPolicy;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -26,45 +27,51 @@ import javax.swing.SwingConstants;
  * @author Atanasovski
  */
 public class ConstructionJFrame2 extends javax.swing.JFrame {
-    
+
     Map<String, CacheLevelGUIRepresentation> createdElements;
     Map<String, CPUCoreGUIRepresentation> createdCPUs;
     DropCpuElementLabel dropL1, dropL2, dropL3;
+    private String selectedCPUCore;
+
     /**
      * Creates new form ConstructionJFrame2
      */
     public ConstructionJFrame2() {
         createdElements = new HashMap<>();
         createdCPUs = new HashMap<>();
-        
+
         initComponents();
         createdElementsPanel.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
         createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
         createdCPUsPanel.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
         dropPanel.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
-        dropL1 = new DropCpuElementLabel("Drop L1 cache element here",1);
-        dropL2 = new DropCpuElementLabel("Drop L2 cache element here",1);
-        dropL3 = new DropCpuElementLabel("Drop L3 cache element here",1);
-        java.awt.Font dropFont = new java.awt.Font("Tahoma",2,11);
+        dropL1 = new DropCpuElementLabel("Drop L1 cache element here", 1);
+        dropL2 = new DropCpuElementLabel("Drop L2 cache element here", 2);
+        dropL3 = new DropCpuElementLabel("Drop L3 cache element here", 3);
+        java.awt.Font dropFont = new java.awt.Font("Tahoma", 2, 11);
         dropL1.setFont(dropFont);
         dropL2.setFont(dropFont);
         dropL3.setFont(dropFont);
-        
+
         dropL1.setHorizontalAlignment(SwingConstants.CENTER);
         dropL2.setHorizontalAlignment(SwingConstants.CENTER);
         dropL3.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         dropL1.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         dropL2.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
         dropL3.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-        
-        dropL1.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
-        dropL2.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
-        dropL3.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
+
+        dropL1.setPreferredSize(new Dimension((int) dropPanel.getSize().getWidth(), 55));
+        dropL2.setPreferredSize(new Dimension((int) dropPanel.getSize().getWidth(), 55));
+        dropL3.setPreferredSize(new Dimension((int) dropPanel.getSize().getWidth(), 55));
 
         dropPanel.add(dropL1);
         dropPanel.add(dropL2);
         dropPanel.add(dropL3);
+        JPanel drawPanel = new DrawHere();
+        drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
+        previewAssemblyPlanel.add(drawPanel);
+        drawPanel.paintComponents(drawPanel.getGraphics());
     }
 
     /**
@@ -369,6 +376,11 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jPanelSelectedCPU.setPreferredSize(new java.awt.Dimension(354, 246));
 
         jButtonCreateCore.setText("Create");
+        jButtonCreateCore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCreateCoreActionPerformed(evt);
+            }
+        });
 
         jLabel6.setBackground(new java.awt.Color(102, 255, 0));
         jLabel6.setForeground(new java.awt.Color(255, 0, 0));
@@ -398,7 +410,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonCreateCore)
-                        .addContainerGap(16, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
                         .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -414,6 +426,11 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
 
         jButtonDeleteCore.setText("Delete Core");
+        jButtonDeleteCore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteCoreActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout combineElementsPanelLayout = new javax.swing.GroupLayout(combineElementsPanel);
         combineElementsPanel.setLayout(combineElementsPanelLayout);
@@ -447,7 +464,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         previewAssemblyPlanel.setLayout(previewAssemblyPlanelLayout);
         previewAssemblyPlanelLayout.setHorizontalGroup(
             previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 610, Short.MAX_VALUE)
         );
         previewAssemblyPlanelLayout.setVerticalGroup(
             previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,7 +518,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "UID tag required for level\n", "EDUCacheSim: " + "Create configuration", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        
+
         int result = JOptionPane.YES_OPTION;
         if (createdElements.containsKey(tag)) {
             result = JOptionPane.showConfirmDialog(null, "Specified UID exists, replace?", "EDUCacheSim: Create configuration", JOptionPane.YES_NO_OPTION);
@@ -529,7 +546,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             }
             CacheLevel cl = new CacheLevelImpl(tag, rp, size, assoc, linew);
             createdElements.put(tag, new CacheLevelGUIRepresentation(this, cl));
-            
+
             createdElementsPanel.add(new CacheLevelGUIRepresentation(this, cl));
             createdElementsPanel.invalidate();
             createdElementsPanel.updateUI();
@@ -540,11 +557,11 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
     private void jButtonDeleteSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteSelectedActionPerformed
         if (selectedCacheElement != null && createdElements.containsKey(selectedCacheElement)) {
-            for(String coreTag : createdCPUs.keySet()){
+            for (String coreTag : createdCPUs.keySet()) {
                 CPUCoreGUIRepresentation cc = createdCPUs.get(coreTag);
-                if(cc.getCore().getLevel(selectedCacheElement)!=null){
-                     JOptionPane.showMessageDialog(null, "Cache level you are trying to delete is being used in the CPUCore with the tag: "+coreTag+". Delete the cpu core first", "EDUCacheSim: " + "Delete cache level", JOptionPane.INFORMATION_MESSAGE);
-                    return ;
+                if (cc.getCore().getLevel(selectedCacheElement) != null) {
+                    JOptionPane.showMessageDialog(null, "Cache level you are trying to delete is being used in the CPUCore with the tag: " + coreTag + ". Delete the cpu core first", "EDUCacheSim: " + "Delete cache level", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 }
             }
             createdElements.remove(selectedCacheElement);
@@ -559,22 +576,47 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonDeleteSelectedActionPerformed
 
     private void constructionTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_constructionTabbedPaneStateChanged
-        
-        JPanel containingPanel=null;
-        if(constructionTabbedPane.getSelectedIndex() == 0){
+
+        JPanel containingPanel = null;
+        if (constructionTabbedPane.getSelectedIndex() == 0) {
             createdElementsPanel.removeAll();
             containingPanel = createdElementsPanel;
-        }else if(constructionTabbedPane.getSelectedIndex() == 1){
+        } else if (constructionTabbedPane.getSelectedIndex() == 1) {
             createdElementsPanelAssemble.removeAll();
             containingPanel = createdElementsPanelAssemble;
         }
-        if (containingPanel!=null) {
+        if (containingPanel != null) {
             for (String key : createdElements.keySet()) {
                 containingPanel.add(createdElements.get(key));
             }
             containingPanel.updateUI();
         }
     }//GEN-LAST:event_constructionTabbedPaneStateChanged
+
+    private void jButtonCreateCoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateCoreActionPerformed
+        if (dropL1.hasLevel() && dropL2.hasLevel() && dropL3.hasLevel()) {
+            String s = JOptionPane.showInputDialog("Enter a UID for the new CPU core:");
+            CPUCore newCore = new CPUCoreImpl(s, dropL1.getAssociatedLevel(), dropL2.getAssociatedLevel(), dropL3.getAssociatedLevel());
+            createdCPUs.put(s, new CPUCoreGUIRepresentation(this, newCore));
+            createdCPUsPanel.add(createdCPUs.get(s));
+            createdCPUsPanel.updateUI();
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "You need to add a cache element for all the levels\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonCreateCoreActionPerformed
+
+    private void jButtonDeleteCoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteCoreActionPerformed
+        if (selectedCPUCore != null && createdCPUs.containsKey(selectedCPUCore)) {
+            createdCPUs.remove(selectedCPUCore);
+            createdCPUsPanel.removeAll();
+            for (String tag : createdCPUs.keySet()) {
+                createdCPUsPanel.add(createdCPUs.get(tag));
+            }
+            createdCPUsPanel.updateUI();
+            selectedCPUCore = null;
+        }
+    }//GEN-LAST:event_jButtonDeleteCoreActionPerformed
     private ReplacementPolicy getReplacementPolicyChosen() {
         if (jRadioButtonConstruction_RP_FIFO.isSelected()) {
             return ReplacementPolicy.FIFO;
@@ -677,6 +719,12 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private String selectedCacheElement;
 
     void loadCoreInfo(CPUCore core) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        selectedCPUCore = core.getTag();
+    }
+    public Map<String,CPUCoreGUIRepresentation> getCreatedCPUs(){
+        return createdCPUs;
+    }
+    public JPanel getCreatedCPUsPanel(){
+        return createdCPUsPanel;
     }
 }
