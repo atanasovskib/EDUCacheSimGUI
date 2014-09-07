@@ -17,31 +17,37 @@ import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JButton;
 
-public class CacheLevelGUIRepresentation extends JButton implements ActionListener{
+public class CacheLevelGUIRepresentation extends JButton implements MouseListener {
+
     private final CacheLevel level;
     private final ConstructionJFrame2 frame;
     private DragSource dragSource;
     private DragGestureListener dragGestureListener;
     private DragSourceListener dragSourceListener;
-    
-    public CacheLevelGUIRepresentation(ConstructionJFrame2 frame,CacheLevel level){
+
+    public CacheLevelGUIRepresentation(ConstructionJFrame2 frame, CacheLevel level) {
         this.level = level;
         this.frame = frame;
         this.setText(level.getTag());
         this.setPreferredSize(new Dimension(100, 50));
         this.setVisible(true);
-        this.addActionListener(this);
+        this.addMouseListener(this);
         this.dragSource = DragSource.getDefaultDragSource();
         this.dragGestureListener = new CacheLevelDragGestureListener();
         this.dragSourceListener = new CacheLevelDragSourceListener();
+        this.dragSource.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_COPY, this.dragGestureListener);
         //this.setCursor(java.awt.Cursor.getPredefinedCursor(Cursor.CURSOR_MOVE));
     }
-    public CacheLevel getCacheLevel(){
+
+    public CacheLevel getCacheLevel() {
         return level;
     }
-    public String stringifyCacheLevel(){
+
+    public String stringifyCacheLevel() {
         CacheLevel lvl = CacheLevelGUIRepresentation.this.getCacheLevel();
         StringBuilder sb = new StringBuilder();
         sb.append("rp:");
@@ -53,19 +59,15 @@ public class CacheLevelGUIRepresentation extends JButton implements ActionListen
         sb.append("#lw:");
         sb.append(lvl.getLineWidth());
         sb.append("#tag:");
-        sb.append(lvl.getTag().replaceAll("#", "_tarabaImaseTuka_").replaceAll(":","_dveTockiImaseTuka_"));
-        
+        sb.append(lvl.getTag().replaceAll("#", "_tarabaImaseTuka_").replaceAll(":", "_dveTockiImaseTuka_"));
+
         return sb.toString();
-    }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        frame.showInfo(level.getTag());
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof CacheLevelGUIRepresentation){
-            CacheLevelGUIRepresentation other =  (CacheLevelGUIRepresentation)obj;
+        if (obj instanceof CacheLevelGUIRepresentation) {
+            CacheLevelGUIRepresentation other = (CacheLevelGUIRepresentation) obj;
             return this.level.getTag().equals(other.getCacheLevel().getTag());
         }
         return false;
@@ -73,9 +75,31 @@ public class CacheLevelGUIRepresentation extends JButton implements ActionListen
 
     @Override
     public int hashCode() {
-        return level.getTag().hashCode(); 
+        return level.getTag().hashCode();
     }
-    class CacheLevelDragGestureListener implements DragGestureListener{
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        frame.showInfo(level.getTag());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    class CacheLevelDragGestureListener implements DragGestureListener {
 
         @Override
         public void dragGestureRecognized(DragGestureEvent dge) {
@@ -83,17 +107,18 @@ public class CacheLevelGUIRepresentation extends JButton implements ActionListen
             Transferable transferable = new StringSelection(data);
             dge.startDrag(DragSource.DefaultCopyNoDrop, transferable, dragSourceListener);
         }
-        
+
     }
-    class CacheLevelDragSourceListener implements DragSourceListener{
+
+    class CacheLevelDragSourceListener implements DragSourceListener {
 
         @Override
         public void dragEnter(DragSourceDragEvent dsde) {
             DragSourceContext context = dsde.getDragSourceContext();
             int myAction = dsde.getDropAction();
-            if((myAction & DnDConstants.ACTION_COPY) != 0){
+            if ((myAction & DnDConstants.ACTION_COPY) != 0) {
                 context.setCursor(DragSource.DefaultCopyDrop);
-            }else{
+            } else {
                 context.setCursor(DragSource.DefaultCopyNoDrop);
             }
         }
@@ -113,6 +138,6 @@ public class CacheLevelGUIRepresentation extends JButton implements ActionListen
         @Override
         public void dragDropEnd(DragSourceDropEvent dsde) {
         }
-        
+
     }
 }

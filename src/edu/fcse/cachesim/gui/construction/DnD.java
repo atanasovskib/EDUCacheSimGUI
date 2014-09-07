@@ -22,12 +22,9 @@ public class DnD extends javax.swing.JFrame {
         Dragable drag=new Dragable("od tuka");
         drag.setSize(100, 100);
         JLabel izmegju=new JLabel("izmegju");
-        Dropable drop = new Dropable("do tuka");
-        drop.setSize(100,100);
         
         this.jPanel1.add(drag);
         this.jPanel1.add(izmegju);
-        this.jPanel1.add(drop);
     }
 
     /**
