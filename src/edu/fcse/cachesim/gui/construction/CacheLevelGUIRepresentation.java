@@ -50,16 +50,15 @@ public class CacheLevelGUIRepresentation extends JButton implements MouseListene
     public String stringifyCacheLevel() {
         CacheLevel lvl = CacheLevelGUIRepresentation.this.getCacheLevel();
         StringBuilder sb = new StringBuilder();
-        sb.append("rp:");
         sb.append(lvl.getRP());
-        sb.append("#size:");
+        sb.append('#');
         sb.append(lvl.getSize());
-        sb.append(("#assoc:"));
+        sb.append(('#'));
         sb.append(lvl.getAssoc());
-        sb.append("#lw:");
+        sb.append('#');
         sb.append(lvl.getLineWidth());
-        sb.append("#tag:");
-        sb.append(lvl.getTag().replaceAll("#", "_tarabaImaseTuka_").replaceAll(":", "_dveTockiImaseTuka_"));
+        sb.append('#');
+        sb.append(lvl.getTag().replaceAll("#", "_tarabaImaseTuka_"));
 
         return sb.toString();
     }

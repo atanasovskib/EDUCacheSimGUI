@@ -12,10 +12,14 @@ import edu.fcse.cachesim.implementation.CacheLevelImpl;
 import edu.fcse.cachesim.interfaces.CPUCore;
 import edu.fcse.cachesim.interfaces.CacheLevel;
 import edu.fcse.cachesim.interfaces.ReplacementPolicy;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -25,7 +29,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     
     Map<String, CacheLevelGUIRepresentation> createdElements;
     Map<String, CPUCoreGUIRepresentation> createdCPUs;
-
+    DropCpuElementLabel dropL1, dropL2, dropL3;
     /**
      * Creates new form ConstructionJFrame2
      */
@@ -37,12 +41,30 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         createdElementsPanel.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
         createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
         createdCPUsPanel.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
-        CacheLevel cl1 = new CacheLevelImpl("test1", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel cl2 = new CacheLevelImpl("test2", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel cl3 = new CacheLevelImpl("test3", ReplacementPolicy.LRU, 1, 1, 1);
-        CPUCore c=new CPUCoreImpl("C1", cl1, cl2, cl3);
-        createdCPUs.put("C1",new CPUCoreGUIRepresentation(this, c));
-        createdCPUsPanel.add(createdCPUs.get("C1"));
+        dropPanel.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
+        dropL1 = new DropCpuElementLabel("Drop L1 cache element here",1);
+        dropL2 = new DropCpuElementLabel("Drop L2 cache element here",1);
+        dropL3 = new DropCpuElementLabel("Drop L3 cache element here",1);
+        java.awt.Font dropFont = new java.awt.Font("Tahoma",2,11);
+        dropL1.setFont(dropFont);
+        dropL2.setFont(dropFont);
+        dropL3.setFont(dropFont);
+        
+        dropL1.setHorizontalAlignment(SwingConstants.CENTER);
+        dropL2.setHorizontalAlignment(SwingConstants.CENTER);
+        dropL3.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        dropL1.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        dropL2.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        dropL3.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+        
+        dropL1.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
+        dropL2.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
+        dropL3.setPreferredSize(new Dimension((int)dropPanel.getSize().getWidth(),55));
+
+        dropPanel.add(dropL1);
+        dropPanel.add(dropL2);
+        dropPanel.add(dropL3);
     }
 
     /**
@@ -90,10 +112,8 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         createdCPUsPanel = new javax.swing.JPanel();
         jPanelSelectedCPU = new javax.swing.JPanel();
         jButtonCreateCore = new javax.swing.JButton();
-        jLabelL1spot = new javax.swing.JLabel();
-        jLabelL2spot = new javax.swing.JLabel();
-        jLabelL3spot = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        dropPanel = new javax.swing.JPanel();
         jButtonDeleteCore = new javax.swing.JButton();
         previewAssemblyPlanel = new javax.swing.JPanel();
 
@@ -350,32 +370,22 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
         jButtonCreateCore.setText("Create");
 
-        jLabelL1spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabelL1spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelL1spot.setText("Drop L1 cache element here");
-        jLabelL1spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabelL1spot.setMaximumSize(new java.awt.Dimension(34, 55));
-        jLabelL1spot.setMinimumSize(new java.awt.Dimension(34, 55));
-        jLabelL1spot.setPreferredSize(new java.awt.Dimension(34, 55));
-
-        jLabelL2spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabelL2spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelL2spot.setText("Drop L2 cache element here");
-        jLabelL2spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabelL2spot.setMaximumSize(new java.awt.Dimension(34, 55));
-        jLabelL2spot.setMinimumSize(new java.awt.Dimension(34, 55));
-        jLabelL2spot.setPreferredSize(new java.awt.Dimension(34, 55));
-
-        jLabelL3spot.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabelL3spot.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelL3spot.setText("Drop L3 cache element here");
-        jLabelL3spot.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabelL3spot.setMaximumSize(new java.awt.Dimension(34, 55));
-        jLabelL3spot.setMinimumSize(new java.awt.Dimension(34, 55));
-        jLabelL3spot.setPreferredSize(new java.awt.Dimension(34, 55));
-
+        jLabel6.setBackground(new java.awt.Color(102, 255, 0));
         jLabel6.setForeground(new java.awt.Color(255, 0, 0));
         jLabel6.setText("<-Drag from the created elements");
+
+        dropPanel.setPreferredSize(new java.awt.Dimension(320, 194));
+
+        javax.swing.GroupLayout dropPanelLayout = new javax.swing.GroupLayout(dropPanel);
+        dropPanel.setLayout(dropPanelLayout);
+        dropPanelLayout.setHorizontalGroup(
+            dropPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 320, Short.MAX_VALUE)
+        );
+        dropPanelLayout.setVerticalGroup(
+            dropPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 194, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanelSelectedCPULayout = new javax.swing.GroupLayout(jPanelSelectedCPU);
         jPanelSelectedCPU.setLayout(jPanelSelectedCPULayout);
@@ -385,26 +395,19 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCreateCore))
+                        .addComponent(jButtonCreateCore)
+                        .addContainerGap(16, Short.MAX_VALUE))
                     .addGroup(jPanelSelectedCPULayout.createSequentialGroup()
-                        .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelL1spot, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelL2spot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabelL3spot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                        .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanelSelectedCPULayout.setVerticalGroup(
             jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSelectedCPULayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelL1spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelL2spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelL3spot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCreateCore)
                     .addComponent(jLabel6)))
@@ -626,6 +629,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JPanel createdElementsPanelAssemble;
     private javax.swing.JScrollPane createdElementsScrollAssemble;
     private javax.swing.JScrollPane createdElementsScrollPane;
+    private javax.swing.JPanel dropPanel;
     private javax.swing.JPanel elementTabPanel;
     private javax.swing.JButton jButtonConstruction_CreateLevel;
     private javax.swing.JButton jButtonCreateCore;
@@ -640,9 +644,6 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabelL1spot;
-    private javax.swing.JLabel jLabelL2spot;
-    private javax.swing.JLabel jLabelL3spot;
     private javax.swing.JLabel jLabelSelected;
     private javax.swing.JLabel jLabelToolTipAssoc;
     private javax.swing.JLabel jLabelToolTipLW;

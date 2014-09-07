@@ -5,6 +5,9 @@
  */
 package edu.fcse.cachesim.gui.construction;
 
+import edu.fcse.cachesim.implementation.CacheLevelImpl;
+import edu.fcse.cachesim.interfaces.CacheLevel;
+import edu.fcse.cachesim.interfaces.ReplacementPolicy;
 import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -21,22 +24,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 public class DropCpuElementLabel extends JLabel {
-
-    public DropCpuElementLabel(String s) {
+    private CacheLevel associatedLevel;
+    private int level;
+    public DropCpuElementLabel(String s,int level) {
         this.setText(s);
+        this.level = level;
         DropTargetListener dtListener = new DTListenerImpl();
         this.dropTarget = new DropTarget(this, this.acceptableActions, dtListener, true);
+        this.setOpaque(true);
     }
     private final DropTarget dropTarget;
     private final int acceptableActions = DnDConstants.ACTION_COPY;
 
     class DTListenerImpl implements DropTargetListener {
-
+        private Border oldBorder;
         @Override
         public void dragEnter(DropTargetDragEvent dtde) {
-            DropCpuElementLabel.this.setBorder(BorderFactory.createLineBorder(Color.green));
+            oldBorder=DropCpuElementLabel.this.getBorder();
+            DropCpuElementLabel.this.setBorder(BorderFactory.createLineBorder(Color.green,2));
             dtde.acceptDrag(DropCpuElementLabel.this.acceptableActions);
         }
 
@@ -52,7 +60,7 @@ public class DropCpuElementLabel extends JLabel {
 
         @Override
         public void dragExit(DropTargetEvent dte) {
-            DropCpuElementLabel.this.setBorder(BorderFactory.createEmptyBorder());
+            DropCpuElementLabel.this.setBorder(oldBorder);
         }
 
         @Override
@@ -60,17 +68,38 @@ public class DropCpuElementLabel extends JLabel {
             try {
                 Transferable ss = dtde.getTransferable();
                 DataFlavor[] flavors = ss.getTransferDataFlavors();
-                System.out.println(Arrays.toString(flavors));
                 String sk = (String) ss.getTransferData(flavors[0]);
-                DropCpuElementLabel.this.setBackground(Color.lightGray);
-                DropCpuElementLabel.this.setText(sk);
-                DropCpuElementLabel.this.setBorder(BorderFactory.createEmptyBorder());
+                CacheLevel level = destringifyLevel(sk);
+                DropCpuElementLabel.this.associatedLevel=level;
+                float[] vals=new float[3];
+                Color.RGBtoHSB(161, 172, 246, vals);
+                DropCpuElementLabel.this.setBackground(Color.getHSBColor(vals[0], vals[1], vals[2]));
+                DropCpuElementLabel.this.setText("<html>"+"<b>UID: "+level.getTag()+"</b><br/>"+level.getSize()+"B "+level.getRP()+"</html>");
+                DropCpuElementLabel.this.setBorder(BorderFactory.createLineBorder(Color.BLUE));
             } catch (UnsupportedFlavorException ex) {
                 Logger.getLogger(DropCpuElementLabel.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(DropCpuElementLabel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
+        private CacheLevel destringifyLevel(String str){
+            String []parts=str.split("#");
+            ReplacementPolicy rp;
+            switch(parts[0]){
+                case "BitPLRU":
+                    rp=ReplacementPolicy.BitPLRU;
+                    break;
+                case "LRU":
+                    rp=ReplacementPolicy.LRU;
+                    break;
+                default:
+                    rp=ReplacementPolicy.FIFO;
+            }
+            int size=Integer.parseInt(parts[1]);
+            int assoc=Integer.parseInt(parts[2]);
+            int lw=Integer.parseInt(parts[3]);
+            String tag = parts[4].replaceAll("_tarabaImaseTuka_", "#");
+            return new CacheLevelImpl(tag, rp, size, assoc, lw);
+        }
     }
 }
