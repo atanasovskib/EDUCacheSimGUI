@@ -33,6 +33,8 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     DropCpuElementLabel dropL1, dropL2, dropL3;
     private String selectedCPUCore;
 
+    private DrawArchitecturePanel drawPanel;
+
     /**
      * Creates new form ConstructionJFrame2
      */
@@ -68,10 +70,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         dropPanel.add(dropL1);
         dropPanel.add(dropL2);
         dropPanel.add(dropL3);
-        JPanel drawPanel = new DrawHere();
+
+        Map<String, CPUCore> kure = new HashMap<>();
+        kure.put("Tag", new CPUCoreImpl("Tag", null, null, null));
+        kure.put("Tag 1", new CPUCoreImpl("Tag 1", null, null, null));
+        drawPanel = new DrawArchitecturePanel(kure);
         drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
+        drawPanel.setSize(previewAssemblyPlanel.getSize());
         previewAssemblyPlanel.add(drawPanel);
-        drawPanel.paintComponents(drawPanel.getGraphics());
+        
     }
 
     /**
@@ -123,6 +130,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         dropPanel = new javax.swing.JPanel();
         jButtonDeleteCore = new javax.swing.JButton();
         previewAssemblyPlanel = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -278,7 +286,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                             .addComponent(jTextFieldUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(19, 19, 19)
                         .addComponent(jButtonConstruction_CreateLevel)))
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addContainerGap(195, Short.MAX_VALUE))
         );
 
         createdElementsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Cache Elements"));
@@ -345,7 +353,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         createdElementsPanelAssemble.setLayout(createdElementsPanelAssembleLayout);
         createdElementsPanelAssembleLayout.setHorizontalGroup(
             createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 130, Short.MAX_VALUE)
+            .addGap(0, 113, Short.MAX_VALUE)
         );
         createdElementsPanelAssembleLayout.setVerticalGroup(
             createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -396,7 +404,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         dropPanelLayout.setVerticalGroup(
             dropPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 194, Short.MAX_VALUE)
+            .addGap(0, 190, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanelSelectedCPULayout = new javax.swing.GroupLayout(jPanelSelectedCPU);
@@ -418,7 +426,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jPanelSelectedCPULayout.setVerticalGroup(
             jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSelectedCPULayout.createSequentialGroup()
-                .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCreateCore)
@@ -447,10 +455,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         combineElementsPanelLayout.setVerticalGroup(
             combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(createdElementsScrollAssemble)
+            .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(combineElementsPanelLayout.createSequentialGroup()
                 .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelSelectedCPU, 242, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(combineElementsPanelLayout.createSequentialGroup()
                         .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -458,17 +466,21 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        previewAssemblyPlanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Preview"));
+        previewAssemblyPlanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                previewAssemblyPlanelComponentResized(evt);
+            }
+        });
 
         javax.swing.GroupLayout previewAssemblyPlanelLayout = new javax.swing.GroupLayout(previewAssemblyPlanel);
         previewAssemblyPlanel.setLayout(previewAssemblyPlanelLayout);
         previewAssemblyPlanelLayout.setHorizontalGroup(
             previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 610, Short.MAX_VALUE)
+            .addGap(0, 622, Short.MAX_VALUE)
         );
         previewAssemblyPlanelLayout.setVerticalGroup(
             previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 193, Short.MAX_VALUE)
+            .addGap(0, 213, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout assemblyTabPanelLayout = new javax.swing.GroupLayout(assemblyTabPanel);
@@ -477,13 +489,20 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(assemblyTabPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSeparator1)
+                .addContainerGap())
         );
         assemblyTabPanelLayout.setVerticalGroup(
             assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(assemblyTabPanelLayout.createSequentialGroup()
                 .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(previewAssemblyPlanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         constructionTabbedPane.addTab("Assemble Cache Elements", assemblyTabPanel);
@@ -600,7 +619,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             createdCPUs.put(s, new CPUCoreGUIRepresentation(this, newCore));
             createdCPUsPanel.add(createdCPUs.get(s));
             createdCPUsPanel.updateUI();
-            
+            updateDrawing();
         } else {
             JOptionPane.showMessageDialog(null, "You need to add a cache element for all the levels\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -617,6 +636,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             selectedCPUCore = null;
         }
     }//GEN-LAST:event_jButtonDeleteCoreActionPerformed
+
+    private void previewAssemblyPlanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_previewAssemblyPlanelComponentResized
+        int heightDif = Math.abs(previewAssemblyPlanel.getHeight() - drawPanel.getHeight());
+        int widthDif = Math.abs(previewAssemblyPlanel.getWidth() - drawPanel.getWidth());
+        if (heightDif > 30 || widthDif > 50) {
+            drawPanel.setSize(previewAssemblyPlanel.getSize());
+            drawPanel.updateUI();
+        }
+    }//GEN-LAST:event_previewAssemblyPlanelComponentResized
     private ReplacementPolicy getReplacementPolicyChosen() {
         if (jRadioButtonConstruction_RP_FIFO.isSelected()) {
             return ReplacementPolicy.FIFO;
@@ -697,6 +725,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButtonConstruction_RP_FIFO;
     private javax.swing.JRadioButton jRadioButtonConstruction_RP_LRU;
     private javax.swing.JRadioButton jRadioButtonConstructuion_RP_BPLRU;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldAssoc;
     private javax.swing.JTextField jTextFieldLineW;
     private javax.swing.JTextField jTextFieldSize;
@@ -721,10 +750,21 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     void loadCoreInfo(CPUCore core) {
         selectedCPUCore = core.getTag();
     }
-    public Map<String,CPUCoreGUIRepresentation> getCreatedCPUs(){
+
+    public Map<String, CPUCoreGUIRepresentation> getCreatedCPUs() {
         return createdCPUs;
     }
-    public JPanel getCreatedCPUsPanel(){
+
+    public JPanel getCreatedCPUsPanel() {
         return createdCPUsPanel;
+    }
+
+    private void updateDrawing() {
+        Map<String, CPUCore> cores = new HashMap<>();
+        for (String tag : createdCPUs.keySet()) {
+            cores.put(tag, createdCPUs.get(tag).getCore());
+        }
+        drawPanel.setCores(cores);
+        drawPanel.updateUI();
     }
 }
