@@ -72,8 +72,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         dropPanel.add(dropL3);
 
         Map<String, CPUCore> kure = new HashMap<>();
-        kure.put("Tag", new CPUCoreImpl("Tag", null, null, null));
-        kure.put("Tag 1", new CPUCoreImpl("Tag 1", null, null, null));
+        CacheLevel lvl1=new CacheLevelImpl("l1", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl2=new CacheLevelImpl("l2_1", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl2_2=new CacheLevelImpl("l2_2", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl3=new CacheLevelImpl("l3_1",ReplacementPolicy.FIFO,1,1,1);
+        CacheLevel lvl3_2=new CacheLevelImpl("l3_2",ReplacementPolicy.FIFO,1,1,1);
+        
+        kure.put("ШTag", new CPUCoreImpl("ШTag", lvl1, lvl2_2, lvl3));
+        kure.put("Tag 1", new CPUCoreImpl("Tag 1", lvl1, lvl2,lvl3_2));
+        kure.put("Tag 2", new CPUCoreImpl("Tag 2", lvl1, lvl2,lvl3_2));
         drawPanel = new DrawArchitecturePanel(kure);
         drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
         drawPanel.setSize(previewAssemblyPlanel.getSize());
@@ -764,7 +771,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         for (String tag : createdCPUs.keySet()) {
             cores.put(tag, createdCPUs.get(tag).getCore());
         }
-        drawPanel.setCores(cores);
+        drawPanel.updateStuff(cores);
         drawPanel.updateUI();
     }
 }
