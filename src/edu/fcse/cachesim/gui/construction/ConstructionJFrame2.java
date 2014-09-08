@@ -72,20 +72,23 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         dropPanel.add(dropL3);
 
         Map<String, CPUCore> kure = new HashMap<>();
-        CacheLevel lvl1=new CacheLevelImpl("l1", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl2=new CacheLevelImpl("l2_1", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl2_2=new CacheLevelImpl("l2_2", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl3=new CacheLevelImpl("l3_1",ReplacementPolicy.FIFO,1,1,1);
-        CacheLevel lvl3_2=new CacheLevelImpl("l3_2",ReplacementPolicy.FIFO,1,1,1);
-        
-        kure.put("ШTag", new CPUCoreImpl("ШTag", lvl1, lvl2_2, lvl3));
-        kure.put("Tag 1", new CPUCoreImpl("Tag 1", lvl1, lvl2,lvl3_2));
-        kure.put("Tag 2", new CPUCoreImpl("Tag 2", lvl1, lvl2,lvl3_2));
+        CacheLevel lvl1_1 = new CacheLevelImpl("l1_1", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl1_2 = new CacheLevelImpl("l1_2", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl1_3 = new CacheLevelImpl("l1_3", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl2_2 = new CacheLevelImpl("l2_1", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl2_3 = new CacheLevelImpl("l2_2", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl2_1 = new CacheLevelImpl("l2_3", ReplacementPolicy.LRU, 1, 1, 1);
+        CacheLevel lvl3_1 = new CacheLevelImpl("l3_1", ReplacementPolicy.FIFO, 1, 1, 1);
+        CacheLevel lvl3_2 = new CacheLevelImpl("l3_2", ReplacementPolicy.FIFO, 1, 1, 1);
+
+        kure.put("ШTag", new CPUCoreImpl("ШTag", lvl1_1, lvl2_2, lvl3_1));
+        kure.put("Tag 1", new CPUCoreImpl("Tag 1", lvl1_2, lvl2_3, lvl3_2));
+        kure.put("Tag 2", new CPUCoreImpl("Tag 2", lvl1_3, lvl2_1, lvl3_2));
         drawPanel = new DrawArchitecturePanel(kure);
         drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
         drawPanel.setSize(previewAssemblyPlanel.getSize());
         previewAssemblyPlanel.add(drawPanel);
-        
+
     }
 
     /**

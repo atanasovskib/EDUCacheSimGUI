@@ -131,7 +131,7 @@ public class DrawArchitecturePanel extends JPanel {
         int currentX = 0;
         int l3Height = (int) (0.24 * coreHeight);
         int currentY = coreHeight - l3Height;
-        Queue<String> l3DrawOrder=new LinkedList<String>();
+        Queue<String> l3DrawOrder = new LinkedList<String>();
         while (!podredeni.isEmpty()) {
             CacheLevel current = podredeni.poll();
             int numTimes = elementToNumCores.get(current.getTag());
@@ -142,12 +142,13 @@ public class DrawArchitecturePanel extends JPanel {
             currentX += numTimes * coreWidth;
             l3DrawOrder.add(current.getTag());
         }
-        drawAllL2s(g,coreWidth, coreHeight,l3DrawOrder);
+        drawAllL2s(g, coreWidth, coreHeight, l3DrawOrder);
     }
 
     private void drawAllL2s(Graphics g, int coreWidth, int coreHeight, Queue<String> l3DrawOrder) {
-        
-            int currentX = 0;
+
+        int currentX = 0;
+        Queue<String> l2DrawOrder = new LinkedList<String>();
         while (!l3DrawOrder.isEmpty()) {
             String l3Tag = l3DrawOrder.poll();
             Set<String> l2tags = l3tol2.get(l3Tag);
@@ -174,10 +175,44 @@ public class DrawArchitecturePanel extends JPanel {
                 int centerOfRect = currentX + 5 + ((numTimes * coreWidth - 5) / 2);
                 g.drawString(currentL2.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l2Height / 2)));
                 currentX += numTimes * coreWidth;
+                l2DrawOrder.add(currentL2.getTag());
+            }
+        }
+        drawAllL1s(g, coreWidth, coreHeight, l2DrawOrder);
+    }
+    private void drawAllL1s(Graphics g,  int coreWidth, int coreHeight, Queue<String> l2DrawOrder) {
+        
+        int currentX = 0;
+        while (!l2DrawOrder.isEmpty()) {
+            String l2Tag = l2DrawOrder.poll();
+            Set<String> l1tags = l2tol1.get(l2Tag);
+            PriorityQueue<CacheLevel> podredeni = new PriorityQueue<>(new Comparator<CacheLevel>() {
+
+                @Override
+                public int compare(CacheLevel o1, CacheLevel o2) {
+                    return Integer.compare(elementToNumCores.get(o2.getTag()), elementToNumCores.get(o1.getTag()));
+                }
+
+            });
+            for (String l1 : l1tags) {
+                podredeni.add((CacheLevel) elements.get(l1));
+            }
+            int l3Height = (int) (0.24 * coreHeight);
+            int lineHeight = (int) (0.08 * coreHeight);
+            int l2Height = (int) (0.2 * coreHeight);
+            int l1Height = (int) (0.16 * coreHeight);
+            int currentY = coreHeight - l3Height - 2*lineHeight - l2Height - l1Height;
+            while (!podredeni.isEmpty()) {
+                CacheLevel currentL1 = podredeni.poll();
+                int numTimes = elementToNumCores.get(currentL1.getTag());
+                g.drawRect(currentX + 5, currentY, (numTimes * coreWidth) - 5, l1Height);
+                int tagWidth = (int) g.getFontMetrics().getStringBounds(currentL1.getTag(), g).getWidth();
+                int centerOfRect = currentX + 5 + ((numTimes * coreWidth - 5) / 2);
+                g.drawString(currentL1.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l1Height / 2)));
+                currentX += numTimes * coreWidth;
             }
         }
     }
-
     private class Shape {
 
         public Shape(double x, double y, double width, double height) {
