@@ -72,18 +72,6 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         dropPanel.add(dropL3);
 
         Map<String, CPUCore> kure = new HashMap<>();
-        CacheLevel lvl1_1 = new CacheLevelImpl("l1_1", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl1_2 = new CacheLevelImpl("l1_2", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl1_3 = new CacheLevelImpl("l1_3", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl2_2 = new CacheLevelImpl("l2_1", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl2_3 = new CacheLevelImpl("l2_2", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl2_1 = new CacheLevelImpl("l2_3", ReplacementPolicy.LRU, 1, 1, 1);
-        CacheLevel lvl3_1 = new CacheLevelImpl("l3_1", ReplacementPolicy.FIFO, 1, 1, 1);
-        CacheLevel lvl3_2 = new CacheLevelImpl("l3_2", ReplacementPolicy.FIFO, 1, 1, 1);
-
-        kure.put("ШTag", new CPUCoreImpl("ШTag", lvl1_1, lvl2_2, lvl3_1));
-        kure.put("Tag 1", new CPUCoreImpl("Tag 1", lvl1_2, lvl2_3, lvl3_2));
-        kure.put("Tag 2", new CPUCoreImpl("Tag 2", lvl1_3, lvl2_1, lvl3_2));
         drawPanel = new DrawArchitecturePanel(kure);
         drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
         drawPanel.setSize(previewAssemblyPlanel.getSize());
@@ -141,8 +129,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jButtonDeleteCore = new javax.swing.JButton();
         previewAssemblyPlanel = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuOptions = new javax.swing.JMenu();
+        jMenuItemSave = new javax.swing.JMenuItem();
+        jMenuItemSaveLoad = new javax.swing.JMenuItem();
 
         constructionTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -296,7 +286,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                             .addComponent(jTextFieldUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(19, 19, 19)
                         .addComponent(jButtonConstruction_CreateLevel)))
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addContainerGap(174, Short.MAX_VALUE))
         );
 
         createdElementsScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Cache Elements"));
@@ -355,19 +345,19 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         combineElementsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Create"));
 
         createdElementsScrollAssemble.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        createdElementsScrollAssemble.setMaximumSize(new java.awt.Dimension(32767, 240));
 
         createdElementsPanelAssemble.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Elements"));
-        createdElementsPanelAssemble.setPreferredSize(new java.awt.Dimension(122, 244));
 
         javax.swing.GroupLayout createdElementsPanelAssembleLayout = new javax.swing.GroupLayout(createdElementsPanelAssemble);
         createdElementsPanelAssemble.setLayout(createdElementsPanelAssembleLayout);
         createdElementsPanelAssembleLayout.setHorizontalGroup(
             createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 113, Short.MAX_VALUE)
+            .addGap(0, 130, Short.MAX_VALUE)
         );
         createdElementsPanelAssembleLayout.setVerticalGroup(
             createdElementsPanelAssembleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 221, Short.MAX_VALUE)
+            .addGap(0, 217, Short.MAX_VALUE)
         );
 
         createdElementsScrollAssemble.setViewportView(createdElementsPanelAssemble);
@@ -375,7 +365,6 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         createdCPUsScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         createdCPUsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Cores"));
-        createdCPUsPanel.setPreferredSize(new java.awt.Dimension(95, 190));
 
         javax.swing.GroupLayout createdCPUsPanelLayout = new javax.swing.GroupLayout(createdCPUsPanel);
         createdCPUsPanel.setLayout(createdCPUsPanelLayout);
@@ -385,7 +374,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         createdCPUsPanelLayout.setVerticalGroup(
             createdCPUsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 188, Short.MAX_VALUE)
+            .addGap(0, 183, Short.MAX_VALUE)
         );
 
         createdCPUsScroll.setViewportView(createdCPUsPanel);
@@ -465,14 +454,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         combineElementsPanelLayout.setVerticalGroup(
             combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, combineElementsPanelLayout.createSequentialGroup()
+                .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDeleteCore)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(combineElementsPanelLayout.createSequentialGroup()
-                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelSelectedCPU, 242, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(combineElementsPanelLayout.createSequentialGroup()
-                        .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonDeleteCore)))
+                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.Alignment.LEADING, 242, 242, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -490,7 +480,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         previewAssemblyPlanelLayout.setVerticalGroup(
             previewAssemblyPlanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 213, Short.MAX_VALUE)
+            .addGap(0, 192, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout assemblyTabPanelLayout = new javax.swing.GroupLayout(assemblyTabPanel);
@@ -507,7 +497,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         assemblyTabPanelLayout.setVerticalGroup(
             assemblyTabPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(assemblyTabPanelLayout.createSequentialGroup()
-                .addComponent(combineElementsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(combineElementsPanel, 265, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -516,6 +506,28 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
 
         constructionTabbedPane.addTab("Assemble Cache Elements", assemblyTabPanel);
+
+        jMenuOptions.setMnemonic('o');
+        jMenuOptions.setText("Options");
+
+        jMenuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemSave.setMnemonic('s');
+        jMenuItemSave.setText("Save configuration");
+        jMenuOptions.add(jMenuItemSave);
+
+        jMenuItemSaveLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemSaveLoad.setMnemonic('l');
+        jMenuItemSaveLoad.setText("Save and load in simulator");
+        jMenuItemSaveLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveLoadActionPerformed(evt);
+            }
+        });
+        jMenuOptions.add(jMenuItemSaveLoad);
+
+        jMenuBar1.add(jMenuOptions);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -625,6 +637,18 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private void jButtonCreateCoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateCoreActionPerformed
         if (dropL1.hasLevel() && dropL2.hasLevel() && dropL3.hasLevel()) {
             String s = JOptionPane.showInputDialog("Enter a UID for the new CPU core:");
+            if(s==null || s.length()==0){
+                JOptionPane.showMessageDialog(null, "You must enter a Core UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if(createdCPUs.containsKey(s) ){
+                JOptionPane.showMessageDialog(null, "Another CPU Core exists with the same UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if(createdElements.containsKey(s)){
+                JOptionPane.showMessageDialog(null, "A cache level exists with the provided UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             CPUCore newCore = new CPUCoreImpl(s, dropL1.getAssociatedLevel(), dropL2.getAssociatedLevel(), dropL3.getAssociatedLevel());
             createdCPUs.put(s, new CPUCoreGUIRepresentation(this, newCore));
             createdCPUsPanel.add(createdCPUs.get(s));
@@ -655,6 +679,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             drawPanel.updateUI();
         }
     }//GEN-LAST:event_previewAssemblyPlanelComponentResized
+
+    private void jMenuItemSaveLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveLoadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemSaveLoadActionPerformed
     private ReplacementPolicy getReplacementPolicyChosen() {
         if (jRadioButtonConstruction_RP_FIFO.isSelected()) {
             return ReplacementPolicy.FIFO;
@@ -730,6 +758,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelToolTipRP;
     private javax.swing.JLabel jLabelToolTipSize;
     private javax.swing.JLabel jLabelToolTipUID;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemSave;
+    private javax.swing.JMenuItem jMenuItemSaveLoad;
+    private javax.swing.JMenu jMenuOptions;
     private javax.swing.JPanel jPanelConstruction_CreateNewLevel;
     private javax.swing.JPanel jPanelSelectedCPU;
     private javax.swing.JRadioButton jRadioButtonConstruction_RP_FIFO;

@@ -18,16 +18,14 @@ import javax.swing.JPanel;
 
 public class DrawArchitecturePanel extends JPanel {
 
-    private Set<String> coreTags;
-    private Map<String, Referable> elements;
-    private Map<String, Set<String>> l3tol2;
-    private Map<String, Set<String>> l2tol1;
-    private Map<String, Set<String>> l1toCores;
+    private final Map<String, Referable> elements;
+    private final Map<String, Set<String>> l3tol2;
+    private final Map<String, Set<String>> l2tol1;
+    private final Map<String, Set<String>> l1toCores;
     private Map<String, Integer> elementToNumCores;
     private int numCores;
 
     public DrawArchitecturePanel(Map<String, CPUCore> createdCores) {
-        coreTags = new HashSet<>();
         elements = new HashMap<>();
         l3tol2 = new HashMap<>();
         l2tol1 = new HashMap<>();
@@ -38,8 +36,12 @@ public class DrawArchitecturePanel extends JPanel {
 
     public final void updateStuff(Map<String, CPUCore> createdCores) {
         this.numCores = createdCores.size();
+        elementToNumCores.clear();
+        l1toCores.clear();
+        l2tol1.clear();
+        l3tol2.clear();
+        elements.clear();
         for (String coreTag : createdCores.keySet()) {
-            coreTags.add(coreTag);
             CPUCore current = createdCores.get(coreTag);
             elements.put(coreTag, current);
             CacheLevel lvl = current.getLevel(1);
@@ -96,34 +98,42 @@ public class DrawArchitecturePanel extends JPanel {
             return;
         }
         // height total = 25 parts
-        // core = l1 = 4parts = 16%
-        //l2 = 5 = 20%, l3 = 6 = 24%
+        // core = l1 = 4parts = 16% //14%
+        //l2 = 5 = 18%, l3 = 6 = 22%
         //lines = 2parts = 8%
-        double coreCircleRadius = 0.16 * coreHeight;
         drawAllL3s(g, coreWidth, coreHeight);
     }
 
+    private int getL1Height(int coreHeight) {
+        return (int) (0.14 * coreHeight);
+    }
+    private int getL2Height(int coreHeight){
+        return (int) (0.18 * coreHeight);
+    }
     private void drawCores(Graphics g, int coreWidth, int coreHeight, Queue<String> l1DrawOrder) {
         int currentX = 0;
-        int l3Height = (int) (0.24 * coreHeight);
+        int l3Height = (int) (0.22 * coreHeight);
         int lineHeight = (int) (0.08 * coreHeight);
-        int l2Height = (int) (0.2 * coreHeight);
-        int l1Height = (int) (0.16 * coreHeight);
+        int l2Height = getL2Height(coreHeight);
+        int l1Height = getL1Height(coreHeight);
         int coreCircleHeight = l1Height;
         List<Integer> exesForLines = new LinkedList<>();
         int currentY = coreHeight - l3Height - 3 * lineHeight - l2Height - l1Height - coreCircleHeight;
         while (!l1DrawOrder.isEmpty()) {
             String l1Tag = l1DrawOrder.poll();
             Set<String> coreTags = l1toCores.get(l1Tag);
+            int coreNumber = 0;
+            int numCoresToCurrL1 = coreTags.size();
             for (String coreTag : coreTags) {
                 CPUCore core = (CPUCore) elements.get(coreTag);
-                g.drawOval(currentX + 5, currentY, coreCircleHeight, coreCircleHeight);
-                int centerX = currentX + 5 + ((int) coreCircleHeight / 2);
+                int startOvalX = currentX + (coreWidth / 2) - (coreCircleHeight / 2);
+                g.drawOval(startOvalX, currentY, coreCircleHeight, coreCircleHeight);
+                int centerX = startOvalX + ((int) (coreCircleHeight / 2));
                 exesForLines.add(centerX);
                 int tagWidth = (int) g.getFontMetrics().getStringBounds(core.getTag(), g).getWidth();
-                int centerOfRect = currentX + 5 + (coreCircleHeight / 2);
-                g.drawString(core.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY - lineHeight));
+                g.drawString(core.getTag(), (int) (centerX - (tagWidth / 2.0)), (int) (currentY-5));
                 currentX += coreWidth;
+                coreNumber++;
             }
         }
         drawLines(g, currentY + coreCircleHeight, exesForLines, lineHeight);
@@ -143,7 +153,7 @@ public class DrawArchitecturePanel extends JPanel {
             podredeni.add(l3);
         }
         int currentX = 0;
-        int l3Height = (int) (0.24 * coreHeight);
+        int l3Height = (int) (0.22 * coreHeight);
         int currentY = coreHeight - l3Height;
         Queue<String> l3DrawOrder = new LinkedList<>();
         while (!podredeni.isEmpty()) {
@@ -164,9 +174,9 @@ public class DrawArchitecturePanel extends JPanel {
         int currentX = 0;
         Queue<String> l2DrawOrder = new LinkedList<>();
         List<Integer> exesForLines = new LinkedList<>();
-        int l3Height = (int) (0.24 * coreHeight);
+        int l3Height = (int) (0.22 * coreHeight);
         int lineHeight = (int) (0.08 * coreHeight);
-        int l2Height = (int) (0.2 * coreHeight);
+        int l2Height = getL2Height(coreHeight);
         int currentY = coreHeight - l3Height - lineHeight - l2Height;
         while (!l3DrawOrder.isEmpty()) {
             String l3Tag = l3DrawOrder.poll();
@@ -194,10 +204,10 @@ public class DrawArchitecturePanel extends JPanel {
 
     private void drawAllL1s(Graphics g, int coreWidth, int coreHeight, Queue<String> l2DrawOrder) {
         int currentX = 0;
-        int l3Height = (int) (0.24 * coreHeight);
+        int l3Height = (int) (0.22 * coreHeight);
         int lineHeight = (int) (0.08 * coreHeight);
-        int l2Height = (int) (0.2 * coreHeight);
-        int l1Height = (int) (0.16 * coreHeight);
+        int l2Height = getL2Height(coreHeight);
+        int l1Height = getL1Height(coreHeight);
         List<Integer> exesForLines = new LinkedList<>();
         Queue<String> l1DrawOrder = new LinkedList<>();
         int currentY = coreHeight - l3Height - 2 * lineHeight - l2Height - l1Height;
