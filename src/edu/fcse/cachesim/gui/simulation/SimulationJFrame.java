@@ -4,6 +4,7 @@ import edu.fcse.cachesim.exceptions.DefaultElementSizeNotSetException;
 import edu.fcse.cachesim.exceptions.TagNotFoundException;
 import edu.fcse.cachesim.filemanip.*;
 import edu.fcse.cachesim.gui.construction.ConstructionJFrame;
+import edu.fcse.cachesim.gui.construction.ConstructionJFrame2;
 import edu.fcse.cachesim.gui.utils.ATFileFilter;
 import edu.fcse.cachesim.gui.utils.CCFileFilter;
 import edu.fcse.cachesim.gui.utils.HTMLFileFilter;
@@ -43,7 +44,7 @@ import javax.swing.JViewport;
 
 public class SimulationJFrame extends javax.swing.JFrame {
     
-    ConstructionJFrame construction_mode;
+    ConstructionJFrame2 construction_mode;
     JFileChooser fileChooser = new JFileChooser();
     Architecture loadedArchitecture;
     int clickedLevel;
@@ -823,7 +824,7 @@ public class SimulationJFrame extends javax.swing.JFrame {
     
     private void jMenuItemSimulation_CreateConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSimulation_CreateConfigActionPerformed
         if (construction_mode == null) {
-            construction_mode = new ConstructionJFrame(this);
+            construction_mode = new ConstructionJFrame2(this);
         }
         construction_mode.setVisible(true);
     }//GEN-LAST:event_jMenuItemSimulation_CreateConfigActionPerformed

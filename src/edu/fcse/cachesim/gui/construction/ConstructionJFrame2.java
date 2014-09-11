@@ -5,19 +5,30 @@
  */
 package edu.fcse.cachesim.gui.construction;
 
+import edu.fcse.cachesim.filemanip.CCFCreator;
+import edu.fcse.cachesim.gui.simulation.SimulationJFrame;
+import edu.fcse.cachesim.gui.utils.CCFileFilter;
 import edu.fcse.cachesim.gui.utils.StringLiterals;
 import edu.fcse.cachesim.gui.utils.WrapLayout;
+import edu.fcse.cachesim.implementation.ArchitectureImpl;
 import edu.fcse.cachesim.implementation.CPUCoreImpl;
 import edu.fcse.cachesim.implementation.CacheLevelImpl;
+import edu.fcse.cachesim.interfaces.Architecture;
 import edu.fcse.cachesim.interfaces.CPUCore;
 import edu.fcse.cachesim.interfaces.CacheLevel;
+import edu.fcse.cachesim.interfaces.Referable;
 import edu.fcse.cachesim.interfaces.ReplacementPolicy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -34,14 +45,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private String selectedCPUCore;
 
     private DrawArchitecturePanel drawPanel;
+    private final SimulationJFrame simulationFrame;
 
     /**
      * Creates new form ConstructionJFrame2
+     * @param simulationFrame 
      */
-    public ConstructionJFrame2() {
+    public ConstructionJFrame2(SimulationJFrame simulationFrame) {
         createdElements = new HashMap<>();
         createdCPUs = new HashMap<>();
-
         initComponents();
         createdElementsPanel.setLayout(new WrapLayout(WrapLayout.LEFT, 5, 5));
         createdElementsPanelAssemble.setLayout(new WrapLayout(WrapLayout.CENTER, 5, 5));
@@ -76,7 +88,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         drawPanel.setPreferredSize(previewAssemblyPlanel.getSize());
         drawPanel.setSize(previewAssemblyPlanel.getSize());
         previewAssemblyPlanel.add(drawPanel);
-
+        this.simulationFrame = simulationFrame;
     }
 
     /**
@@ -403,7 +415,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         dropPanelLayout.setVerticalGroup(
             dropPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanelSelectedCPULayout = new javax.swing.GroupLayout(jPanelSelectedCPU);
@@ -449,7 +461,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
                 .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(createdCPUsScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(createdCPUsScroll)
                     .addComponent(jButtonDeleteCore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         combineElementsPanelLayout.setVerticalGroup(
@@ -513,6 +525,11 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jMenuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMenuItemSave.setMnemonic('s');
         jMenuItemSave.setText("Save configuration");
+        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveActionPerformed(evt);
+            }
+        });
         jMenuOptions.add(jMenuItemSave);
 
         jMenuItemSaveLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -637,15 +654,15 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private void jButtonCreateCoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateCoreActionPerformed
         if (dropL1.hasLevel() && dropL2.hasLevel() && dropL3.hasLevel()) {
             String s = JOptionPane.showInputDialog("Enter a UID for the new CPU core:");
-            if(s==null || s.length()==0){
+            if (s == null || s.length() == 0) {
                 JOptionPane.showMessageDialog(null, "You must enter a Core UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            if(createdCPUs.containsKey(s) ){
+            if (createdCPUs.containsKey(s)) {
                 JOptionPane.showMessageDialog(null, "Another CPU Core exists with the same UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            if(createdElements.containsKey(s)){
+            if (createdElements.containsKey(s)) {
                 JOptionPane.showMessageDialog(null, "A cache level exists with the provided UID\n", "EDUCacheSim: " + "Create CPU Core", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
@@ -681,8 +698,46 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     }//GEN-LAST:event_previewAssemblyPlanelComponentResized
 
     private void jMenuItemSaveLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveLoadActionPerformed
-        // TODO add your handling code here:
+        File f = saveConfiguration();
+        if (f != null) {
+            this.dispose();
+            simulationFrame.loadConfiguration(f);
+        }
     }//GEN-LAST:event_jMenuItemSaveLoadActionPerformed
+
+    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
+        saveConfiguration();
+    }//GEN-LAST:event_jMenuItemSaveActionPerformed
+    private File saveConfiguration() {
+        //create an empty architecture and add the cores from the created elements shown in jTable1
+        Architecture a = new ArchitectureImpl();
+        for (CPUCoreGUIRepresentation r : createdCPUs.values()) {
+            a.addCore(r.getCore());
+        }
+        if (a.getNumOfCores() > 0) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new CCFileFilter());
+            fileChooser.setSelectedFile(new File("configuration.ccf"));
+            int returnVal = fileChooser.showSaveDialog(ConstructionJFrame2.this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                try {
+                    CCFCreator.writeConfigurationToFile(a, file);
+                    JOptionPane.showMessageDialog(null, StringLiterals.CONFIGURATION_SAVED, "EDUCacheSim: " + "Save configuration", JOptionPane.INFORMATION_MESSAGE);
+                    return file;
+                } catch (IOException ex) {
+                    Logger.getLogger(ConstructionJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, StringLiterals.CONFIGURATION_ERROR_SAVE + "!\n" + ex.getMessage(), "EDUCacheSim: " + "Save configuration", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } else {
+            //if no cores were created prompt there is nothing to save
+            JOptionPane.showMessageDialog(null, "No CPU cores created!\n", "EDUCacheSim: " + "Save configuration", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return null;
+    }
+
     private ReplacementPolicy getReplacementPolicyChosen() {
         if (jRadioButtonConstruction_RP_FIFO.isSelected()) {
             return ReplacementPolicy.FIFO;
@@ -692,40 +747,6 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         return ReplacementPolicy.BitPLRU;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConstructionJFrame2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConstructionJFrame2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConstructionJFrame2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConstructionJFrame2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ConstructionJFrame2().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel assemblyTabPanel;
