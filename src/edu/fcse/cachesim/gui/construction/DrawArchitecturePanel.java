@@ -3,6 +3,7 @@ package edu.fcse.cachesim.gui.construction;
 import edu.fcse.cachesim.interfaces.CPUCore;
 import edu.fcse.cachesim.interfaces.CacheLevel;
 import edu.fcse.cachesim.interfaces.Referable;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Comparator;
@@ -119,6 +120,7 @@ public class DrawArchitecturePanel extends JPanel {
         int coreCircleHeight = l1Height;
         List<Integer> exesForLines = new LinkedList<>();
         int currentY = coreHeight - l3Height - 3 * lineHeight - l2Height - l1Height - coreCircleHeight;
+        g.setColor(Color.black);
         while (!l1DrawOrder.isEmpty()) {
             String l1Tag = l1DrawOrder.poll();
             Set<String> coreTags = l1toCores.get(l1Tag);
@@ -156,12 +158,15 @@ public class DrawArchitecturePanel extends JPanel {
         int l3Height = (int) (0.22 * coreHeight);
         int currentY = coreHeight - l3Height;
         Queue<String> l3DrawOrder = new LinkedList<>();
+        
         while (!podredeni.isEmpty()) {
             CacheLevel current = podredeni.poll();
             int numTimes = elementToNumCores.get(current.getTag());
+            g.setColor(Color.RED);
             g.drawRect(currentX + 5, currentY, (numTimes * coreWidth) - 5, l3Height);
             int tagWidth = (int) g.getFontMetrics().getStringBounds(current.getTag(), g).getWidth();
             int centerOfRect = currentX + 5 + ((numTimes * coreWidth - 5) / 2);
+            g.setColor(Color.black);
             g.drawString(current.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l3Height / 2)));
             currentX += numTimes * coreWidth;
             l3DrawOrder.add(current.getTag());
@@ -178,6 +183,7 @@ public class DrawArchitecturePanel extends JPanel {
         int lineHeight = (int) (0.08 * coreHeight);
         int l2Height = getL2Height(coreHeight);
         int currentY = coreHeight - l3Height - lineHeight - l2Height;
+        
         while (!l3DrawOrder.isEmpty()) {
             String l3Tag = l3DrawOrder.poll();
             Set<String> l2tags = l3tol2.get(l3Tag);
@@ -189,9 +195,11 @@ public class DrawArchitecturePanel extends JPanel {
             while (!podredeni.isEmpty()) {
                 CacheLevel currentL2 = podredeni.poll();
                 int numTimes = elementToNumCores.get(currentL2.getTag());
+                g.setColor(Color.orange);
                 g.drawRect(currentX + 5, currentY, (numTimes * coreWidth) - 5, l2Height);
                 int tagWidth = (int) g.getFontMetrics().getStringBounds(currentL2.getTag(), g).getWidth();
                 int centerOfRect = currentX + 5 + ((numTimes * coreWidth - 5) / 2);
+                g.setColor(Color.black);
                 g.drawString(currentL2.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l2Height / 2)));
                 currentX += numTimes * coreWidth;
                 l2DrawOrder.add(currentL2.getTag());
@@ -211,6 +219,7 @@ public class DrawArchitecturePanel extends JPanel {
         List<Integer> exesForLines = new LinkedList<>();
         Queue<String> l1DrawOrder = new LinkedList<>();
         int currentY = coreHeight - l3Height - 2 * lineHeight - l2Height - l1Height;
+        
         while (!l2DrawOrder.isEmpty()) {
             String l2Tag = l2DrawOrder.poll();
             Set<String> l1tags = l2tol1.get(l2Tag);
@@ -222,11 +231,13 @@ public class DrawArchitecturePanel extends JPanel {
             while (!podredeni.isEmpty()) {
                 CacheLevel currentL1 = podredeni.poll();
                 int numTimes = elementToNumCores.get(currentL1.getTag());
+                g.setColor(Color.blue);
                 g.drawRect(currentX + 5, currentY, (numTimes * coreWidth) - 5, l1Height);
                 int centerX = currentX + 5 + ((int) (numTimes * coreWidth - 5) / 2);
                 exesForLines.add(centerX);
                 int tagWidth = (int) g.getFontMetrics().getStringBounds(currentL1.getTag(), g).getWidth();
                 int centerOfRect = currentX + 5 + ((numTimes * coreWidth - 5) / 2);
+                g.setColor(Color.black);
                 g.drawString(currentL1.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l1Height / 2)));
                 l1DrawOrder.add(currentL1.getTag());
                 currentX += numTimes * coreWidth;
@@ -237,6 +248,7 @@ public class DrawArchitecturePanel extends JPanel {
     }
 
     private void drawLines(Graphics g, int starty, List<Integer> exes, int lineHeight) {
+        g.setColor(Color.black);
         for (int startx : exes) {
             g.drawLine(startx, starty, startx, starty + lineHeight);
         }

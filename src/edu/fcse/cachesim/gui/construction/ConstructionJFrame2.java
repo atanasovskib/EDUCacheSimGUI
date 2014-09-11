@@ -100,6 +100,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         constructionTabbedPane = new javax.swing.JTabbedPane();
         elementTabPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -158,6 +159,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
         jLabel2.setText("Choose replacement policy:");
 
+        buttonGroup1.add(jRadioButtonConstruction_RP_LRU);
         jRadioButtonConstruction_RP_LRU.setSelected(true);
         jRadioButtonConstruction_RP_LRU.setText("LRU");
         jRadioButtonConstruction_RP_LRU.addActionListener(new java.awt.event.ActionListener() {
@@ -166,8 +168,10 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             }
         });
 
+        buttonGroup1.add(jRadioButtonConstruction_RP_FIFO);
         jRadioButtonConstruction_RP_FIFO.setText("FIFO");
 
+        buttonGroup1.add(jRadioButtonConstructuion_RP_BPLRU);
         jRadioButtonConstructuion_RP_BPLRU.setText("Bit PLRU");
 
         jLabel3.setText("Associativity:");
@@ -357,7 +361,6 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         combineElementsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Create"));
 
         createdElementsScrollAssemble.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        createdElementsScrollAssemble.setMaximumSize(new java.awt.Dimension(32767, 240));
 
         createdElementsPanelAssemble.setBorder(javax.swing.BorderFactory.createTitledBorder("Created Elements"));
 
@@ -405,7 +408,8 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 0, 0));
         jLabel6.setText("<-Drag from the created elements");
 
-        dropPanel.setPreferredSize(new java.awt.Dimension(320, 194));
+        dropPanel.setMaximumSize(new java.awt.Dimension(32767, 150));
+        dropPanel.setPreferredSize(new java.awt.Dimension(320, 150));
 
         javax.swing.GroupLayout dropPanelLayout = new javax.swing.GroupLayout(dropPanel);
         dropPanel.setLayout(dropPanelLayout);
@@ -415,7 +419,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         dropPanelLayout.setVerticalGroup(
             dropPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 190, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanelSelectedCPULayout = new javax.swing.GroupLayout(jPanelSelectedCPU);
@@ -437,7 +441,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         jPanelSelectedCPULayout.setVerticalGroup(
             jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSelectedCPULayout.createSequentialGroup()
-                .addComponent(dropPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                .addComponent(dropPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelSelectedCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCreateCore)
@@ -466,16 +470,18 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
         );
         combineElementsPanelLayout.setVerticalGroup(
             combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, combineElementsPanelLayout.createSequentialGroup()
-                .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonDeleteCore)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(combineElementsPanelLayout.createSequentialGroup()
-                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.Alignment.LEADING, 242, 242, Short.MAX_VALUE))
+                .addComponent(jPanelSelectedCPU, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(combineElementsPanelLayout.createSequentialGroup()
+                .addGroup(combineElementsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, combineElementsPanelLayout.createSequentialGroup()
+                        .addComponent(createdCPUsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonDeleteCore)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(createdElementsScrollAssemble, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         previewAssemblyPlanel.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -685,6 +691,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
             }
             createdCPUsPanel.updateUI();
             selectedCPUCore = null;
+            updateDrawing();
         }
     }//GEN-LAST:event_jButtonDeleteCoreActionPerformed
 
@@ -750,6 +757,7 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel assemblyTabPanel;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel combineElementsPanel;
     private javax.swing.JTabbedPane constructionTabbedPane;
     private javax.swing.JPanel createdCPUsPanel;
