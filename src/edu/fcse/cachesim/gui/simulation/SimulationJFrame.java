@@ -824,7 +824,7 @@ public class SimulationJFrame extends javax.swing.JFrame {
     
     private void jMenuItemSimulation_CreateConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSimulation_CreateConfigActionPerformed
         if (construction_mode == null) {
-            construction_mode = new ConstructionJFrame2(this);
+            //construction_mode = new ConstructionJFrame2(this);
         }
         construction_mode.setVisible(true);
     }//GEN-LAST:event_jMenuItemSimulation_CreateConfigActionPerformed

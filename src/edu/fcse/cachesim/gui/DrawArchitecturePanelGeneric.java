@@ -1,5 +1,6 @@
-package edu.fcse.cachesim.gui.construction;
+package edu.fcse.cachesim.gui;
 
+import edu.fcse.cachesim.gui.construction.*;
 import edu.fcse.cachesim.interfaces.CPUCore;
 import edu.fcse.cachesim.interfaces.CacheLevel;
 import edu.fcse.cachesim.interfaces.Referable;
@@ -17,16 +18,28 @@ import java.util.Queue;
 import java.util.Set;
 import javax.swing.JPanel;
 
-public class DrawArchitecturePanel extends JPanel {
+public class DrawArchitecturePanelGeneric extends JPanel {
 
     private final Map<String, Referable> elements;
     private final Map<String, Set<String>> l3tol2;
     private final Map<String, Set<String>> l2tol1;
     private final Map<String, Set<String>> l1toCores;
+    
+    // height total = 18 parts
+        // core = l3 = ram = 3 parts = 16%
+        // l2 = l1 = lines between ram and l3 = 2 parts = 11%
+        // lines between levels = 1parts = 6%
+    private final float L3_DRAW_HEIGHT_FACTOR = 0.16f;
+    private final float L2_DRAW_HEIGHT_FACTOR = 0.16f;
+    private final float L1_DRAW_HEIGHT_FACTOR = 0.115f;
+    private final float CORE_DRAW_HEIGHT_FACTOR = 0.115f;
+    private final float RAM_DRAW_HEIGHT_FACTOR = 0.16f;
+    private final float LINE_LEVELS_DRAW_HEIGHT_FACTOR = 0.06f;
+    private final float LINE_RAM_DRAW_HEIGHT_FACTOR = 0.115f;
     private Map<String, Integer> elementToNumCores;
     private int numCores;
 
-    public DrawArchitecturePanel(Map<String, CPUCore> createdCores) {
+    public DrawArchitecturePanelGeneric(Map<String, CPUCore> createdCores) {
         elements = new HashMap<>();
         l3tol2 = new HashMap<>();
         l2tol1 = new HashMap<>();
@@ -98,10 +111,7 @@ public class DrawArchitecturePanel extends JPanel {
             g.drawString("Expand window", ((int) panelSize.getWidth() / 2) - 25, 10);
             return;
         }
-        // height total = 25 parts
-        // core = l1 = 4parts = 16% //14%
-        //l2 = 5 = 18%, l3 = 6 = 22%
-        //lines = 2parts = 8%
+        
         drawAllL3s(g, coreWidth, coreHeight);
     }
 
@@ -144,18 +154,27 @@ public class DrawArchitecturePanel extends JPanel {
             return Integer.compare(elementToNumCores.get(o2.getTag()), elementToNumCores.get(o1.getTag()));
         }
     };
-
+    
+    private void drawRAM(Graphics g, int coreWidth, int coreHeight){
+        int ramHeight = (int ) (RAM_DRAW_HEIGHT_FACTOR*coreHeight);
+        g.drawRect(5, 0, this.getWidth() - 5, ramHeight);
+        drawAllL3s(g,coreWidth,coreHeight);
+    }
+    
     private void drawAllL3s(Graphics g, int coreWidth, int coreHeight) {
         PriorityQueue<CacheLevel> podredeni = new PriorityQueue<>(prioComparator);
         for (String l3tag : l3tol2.keySet()) {
             CacheLevel l3 = (CacheLevel) elements.get(l3tag);
             podredeni.add(l3);
         }
-        int currentX = 0;
-        int l3Height = (int) (0.22 * coreHeight);
-        int currentY = coreHeight - l3Height;
-        Queue<String> l3DrawOrder = new LinkedList<>();
         
+        int currentX = 0;
+        int l3Height = (int) (L3_DRAW_HEIGHT_FACTOR * coreHeight);
+        int ramHeight = (int ) (RAM_DRAW_HEIGHT_FACTOR*coreHeight);
+        int lineHeight = (int)(LINE_RAM_DRAW_HEIGHT_FACTOR*coreHeight);
+        int currentY = ramHeight+lineHeight;
+        Queue<String> l3DrawOrder = new LinkedList<>();
+        List<Integer> exesForLines = new LinkedList<>();
         while (!podredeni.isEmpty()) {
             CacheLevel current = podredeni.poll();
             int numTimes = elementToNumCores.get(current.getTag());
@@ -167,7 +186,9 @@ public class DrawArchitecturePanel extends JPanel {
             g.drawString(current.getTag(), (int) (centerOfRect - (tagWidth / 2.0)), (int) (currentY + (l3Height / 2)));
             currentX += numTimes * coreWidth;
             l3DrawOrder.add(current.getTag());
+            exesForLines.add(centerOfRect);
         }
+        drawLines(g, currentY, exesForLines, lineHeight);
         drawAllL2s(g, coreWidth, coreHeight, l3DrawOrder);
     }
 
@@ -176,10 +197,11 @@ public class DrawArchitecturePanel extends JPanel {
         int currentX = 0;
         Queue<String> l2DrawOrder = new LinkedList<>();
         List<Integer> exesForLines = new LinkedList<>();
-        int l3Height = (int) (0.22 * coreHeight);
-        int lineHeight = (int) (0.08 * coreHeight);
-        int l2Height = getL2Height(coreHeight);
-        int currentY = coreHeight - l3Height - lineHeight - l2Height;
+        int l3Height = (int) (L3_DRAW_HEIGHT_FACTOR * coreHeight);
+        int lineHeight = (int) (LINE_LEVELS_DRAW_HEIGHT_FACTOR * coreHeight);
+        int l2Height = (int) L2_DRAW_HEIGHT_FACTOR*coreHeight;
+        int ramHeight = (int ) (RAM_DRAW_HEIGHT_FACTOR*coreHeight);
+        int currentY = ramHeight+ l3Height + lineHeight + l2Height;
         
         while (!l3DrawOrder.isEmpty()) {
             String l3Tag = l3DrawOrder.poll();
@@ -209,13 +231,14 @@ public class DrawArchitecturePanel extends JPanel {
 
     private void drawAllL1s(Graphics g, int coreWidth, int coreHeight, Queue<String> l2DrawOrder) {
         int currentX = 0;
-        int l3Height = (int) (0.22 * coreHeight);
-        int lineHeight = (int) (0.08 * coreHeight);
-        int l2Height = getL2Height(coreHeight);
-        int l1Height = getL1Height(coreHeight);
+        int l3Height = (int) (L3_DRAW_HEIGHT_FACTOR * coreHeight);
+        int lineHeight = (int) (LINE_LEVELS_DRAW_HEIGHT_FACTOR * coreHeight);
+        int l2Height = (int) L2_DRAW_HEIGHT_FACTOR*coreHeight;
+        int l1Height = (int) L1_DRAW_HEIGHT_FACTOR*coreHeight;
+        int ramHeight = (int ) (RAM_DRAW_HEIGHT_FACTOR*coreHeight);
         List<Integer> exesForLines = new LinkedList<>();
         Queue<String> l1DrawOrder = new LinkedList<>();
-        int currentY = coreHeight - l3Height - 2 * lineHeight - l2Height - l1Height;
+        int currentY =  ramHeight+l3Height + 2 * lineHeight + l2Height;
         
         while (!l2DrawOrder.isEmpty()) {
             String l2Tag = l2DrawOrder.poll();
@@ -240,6 +263,7 @@ public class DrawArchitecturePanel extends JPanel {
                 currentX += numTimes * coreWidth;
             }
         }
+        
         drawLines(g, currentY + l1Height, exesForLines, lineHeight);
         drawCores(g, coreWidth, coreHeight, l1DrawOrder);
     }

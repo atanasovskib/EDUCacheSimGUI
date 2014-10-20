@@ -7,6 +7,7 @@ package edu.fcse.cachesim.gui.construction;
 
 import edu.fcse.cachesim.filemanip.CCFCreator;
 import edu.fcse.cachesim.gui.simulation.SimulationJFrame;
+import edu.fcse.cachesim.gui.simulation.SimulationJFrame2;
 import edu.fcse.cachesim.gui.utils.CCFileFilter;
 import edu.fcse.cachesim.gui.utils.StringLiterals;
 import edu.fcse.cachesim.gui.utils.WrapLayout;
@@ -45,13 +46,13 @@ public class ConstructionJFrame2 extends javax.swing.JFrame {
     private String selectedCPUCore;
 
     private DrawArchitecturePanel drawPanel;
-    private final SimulationJFrame simulationFrame;
+    private final SimulationJFrame2 simulationFrame;
 
     /**
      * Creates new form ConstructionJFrame2
      * @param simulationFrame 
      */
-    public ConstructionJFrame2(SimulationJFrame simulationFrame) {
+    public ConstructionJFrame2(SimulationJFrame2 simulationFrame) {
         createdElements = new HashMap<>();
         createdCPUs = new HashMap<>();
         initComponents();

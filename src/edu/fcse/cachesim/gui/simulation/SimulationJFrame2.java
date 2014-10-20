@@ -3,7 +3,9 @@ package edu.fcse.cachesim.gui.simulation;
 import edu.fcse.cachesim.exceptions.DefaultElementSizeNotSetException;
 import edu.fcse.cachesim.exceptions.TagNotFoundException;
 import edu.fcse.cachesim.filemanip.*;
+import edu.fcse.cachesim.gui.DrawArchitecturePanelGeneric;
 import edu.fcse.cachesim.gui.construction.ConstructionJFrame2;
+import edu.fcse.cachesim.gui.construction.DrawArchitecturePanel;
 import edu.fcse.cachesim.gui.utils.ATFileFilter;
 import edu.fcse.cachesim.gui.utils.CCFileFilter;
 import edu.fcse.cachesim.gui.utils.HTMLFileFilter;
@@ -49,7 +51,6 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
     int clickedLevel;
     List<CacheSet> visibleCacheSets;
     List<CacheLine> visibleCacheLines;
-    Map<String, Integer> coreTagToTabTranslate;
     ATFParser atf;
     SimState stateOfSimulator;
     Timer timerRun;
@@ -57,9 +58,9 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
     OneStep lastResult;
     BufferedWriter verboseOutput;
     File verboseFile;
-
+    DrawArchitecturePanelGeneric drawArchitecturePanel;
+    private Map<String,CPUCore> coreTagToCore;
     enum SimState {
-
         START, STOP, STEP, END
     }
 
@@ -68,6 +69,11 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
      */
     public SimulationJFrame2() {
         initComponents();
+        Map<String, CPUCore> drawArchitecture = new HashMap<>();
+        drawArchitecturePanel = new DrawArchitecturePanelGeneric(drawArchitecture);
+        drawArchitecturePanel.setPreferredSize(architectureHolderPanel.getSize());
+        drawArchitecturePanel.setSize(architectureHolderPanel.getSize());
+        architectureHolderPanel.add(drawArchitecturePanel);
     }
 
     /**
@@ -82,6 +88,7 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jPanelSimulation = new javax.swing.JPanel();
+        architectureHolderPanel = new javax.swing.JPanel();
         jMenuBarSimulation = new javax.swing.JMenuBar();
         jMenuSimulation_SimOpt = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -105,15 +112,28 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
 
         jPanelSimulation.setPreferredSize(new java.awt.Dimension(500, 425));
 
+        javax.swing.GroupLayout architectureHolderPanelLayout = new javax.swing.GroupLayout(architectureHolderPanel);
+        architectureHolderPanel.setLayout(architectureHolderPanelLayout);
+        architectureHolderPanelLayout.setHorizontalGroup(
+            architectureHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 901, Short.MAX_VALUE)
+        );
+        architectureHolderPanelLayout.setVerticalGroup(
+            architectureHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 311, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanelSimulationLayout = new javax.swing.GroupLayout(jPanelSimulation);
         jPanelSimulation.setLayout(jPanelSimulationLayout);
         jPanelSimulationLayout.setHorizontalGroup(
             jPanelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 901, Short.MAX_VALUE)
+            .addComponent(architectureHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanelSimulationLayout.setVerticalGroup(
             jPanelSimulationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 531, Short.MAX_VALUE)
+            .addGroup(jPanelSimulationLayout.createSequentialGroup()
+                .addComponent(architectureHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 220, Short.MAX_VALUE))
         );
 
         jMenuSimulation_SimOpt.setText("Simulation");
@@ -262,18 +282,16 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
         try {
             loadedArchitecture = CCFParser.parseFile(f, "UTF-8");
             // TODO draw architecture
-            if (coreTagToTabTranslate == null) {
-                coreTagToTabTranslate = new HashMap<>();
+            if (coreTagToCore == null) {
+                coreTagToCore = new HashMap<>();
             }
-            coreTagToTabTranslate.clear();
+            coreTagToCore.clear();
             int i = 0;
             for (String coreTag : loadedArchitecture.getCoreTags()) {
-                coreTagToTabTranslate.put(coreTag, i);
-                i++;
-                // javax.swing.JPanel panelToAdd = new CoreHolderJPanel(SimulationJFrame2.this, loadedArchitecture.getCore(coreTag));
-                //jTabbedPaneSimulation_CPUTabs.addTab(coreTag, panelToAdd);
+                coreTagToCore.put(coreTag, loadedArchitecture.getCore(coreTag));
             }
             jMenuItemSimulation_LoadTrace.setEnabled(true);
+            drawArchitecturePanel.updateStuff(coreTagToCore);
             JOptionPane.showMessageDialog(null, StringLiterals.CONFIGURATION_LOADED, "EDUCacheSim: " + "Load configuration", JOptionPane.INFORMATION_MESSAGE);
         } catch (FileParseException ex) {
             JOptionPane.showMessageDialog(null, StringLiterals.ERROR_PARSING_FILE + "\n" + ex.getMessage(), "EDUCacheSim: " + "Load configuration", JOptionPane.INFORMATION_MESSAGE);
@@ -561,8 +579,7 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
 
     private void jMenuItemSimulation_CreateConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSimulation_CreateConfigActionPerformed
         if (construction_mode == null) {
-            //TODO
-            //construction_mode = new ConstructionJFrame2(this);
+            construction_mode = new ConstructionJFrame2(this);
         }
         construction_mode.setVisible(true);
     }//GEN-LAST:event_jMenuItemSimulation_CreateConfigActionPerformed
@@ -651,6 +668,7 @@ public class SimulationJFrame2 extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel architectureHolderPanel;
     private javax.swing.JMenuBar jMenuBarSimulation;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
